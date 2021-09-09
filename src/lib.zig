@@ -41,3 +41,10 @@ pub fn randomSlice(alloc: *std.mem.Allocator, rand: *std.rand.Random, comptime T
     }
     return buf;
 }
+
+pub fn trimPrefix(in: string, prefix: string) string {
+    if (std.mem.startsWith(u8, in, prefix)) {
+        return in[prefix.len..];
+    }
+    return in;
+}
