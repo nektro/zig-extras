@@ -48,3 +48,9 @@ pub fn trimPrefix(in: string, prefix: string) string {
     }
     return in;
 }
+
+fn base64EncodeAlloc(alloc: *std.mem.Allocator, input: string) !string {
+    const base64 = std.base64.standard_encoder;
+    var buf = try alloc.alloc(u8, base64.calcSize(input.len));
+    return try base64.encode(buf, input);
+}
