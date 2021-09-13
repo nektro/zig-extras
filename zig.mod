@@ -4,3 +4,4 @@ main: src/lib.zig
 license: MIT
 description: An assortment of random utility functions that aren't in std and don't deserve their own pacakge.
 dependencies:
+  - src: git https://github.com/nektro/zig-range

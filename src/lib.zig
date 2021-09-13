@@ -1,5 +1,6 @@
 const std = @import("std");
 const string = []const u8;
+const range = @import("range").range;
 
 pub fn fmtByteCountIEC(alloc: *std.mem.Allocator, b: u64) !string {
     return try reduceNumber(alloc, b, 1024, "B", "KMGTPEZY");
@@ -53,4 +54,12 @@ pub fn base64EncodeAlloc(alloc: *std.mem.Allocator, input: string) !string {
     const base64 = std.base64.standard_encoder;
     var buf = try alloc.alloc(u8, base64.calcSize(input.len));
     return base64.encode(buf, input);
+}
+
+pub fn asciiUpper(alloc: *std.mem.Allocator, input: string) !string {
+    var buf = try alloc.dupe(u8, input);
+    for (range(buf.len)) |_, i| {
+        buf[i] = std.ascii.toUpper(buf[i]);
+    }
+    return buf;
 }
