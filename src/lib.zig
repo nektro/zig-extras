@@ -63,3 +63,17 @@ pub fn asciiUpper(alloc: *std.mem.Allocator, input: string) ![]u8 {
     }
     return buf;
 }
+
+pub fn doesFolderExist(dir: ?std.fs.Dir, fpath: []const u8) !bool {
+    const file = (dir orelse std.fs.cwd()).openFile(fpath, .{}) catch |e| switch (e) {
+        error.FileNotFound => return false,
+        error.IsDir => return true,
+        else => return e,
+    };
+    defer file.close();
+    const s = try file.stat();
+    if (s.kind != .Directory) {
+        return false;
+    }
+    return true;
+}
