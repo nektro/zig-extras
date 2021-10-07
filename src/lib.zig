@@ -87,3 +87,16 @@ pub fn doesFileExist(dir: ?std.fs.Dir, fpath: []const u8) !bool {
     defer file.close();
     return true;
 }
+
+pub fn sliceToInt(comptime T: type, comptime E: type, slice: []const E) !T {
+    const a = @typeInfo(T).Int.bits;
+    const b = @typeInfo(E).Int.bits;
+    if (a < b * slice.len) return error.Overflow;
+
+    var n: T = 0;
+    for (slice) |item, i| {
+        const shift = @intCast(std.math.Log2Int(T), b * (slice.len - 1 - i));
+        n = n | (@as(T, item) << shift);
+    }
+    return n;
+}
