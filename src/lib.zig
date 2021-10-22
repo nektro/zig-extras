@@ -100,3 +100,12 @@ pub fn sliceToInt(comptime T: type, comptime E: type, slice: []const E) !T {
     }
     return n;
 }
+
+pub fn FieldType(comptime T: type, comptime field: std.meta.FieldEnum(T)) type {
+    inline for (std.meta.fields(T)) |item| {
+        if (comptime std.mem.eql(u8, item.name, @tagName(field))) {
+            return item.field_type;
+        }
+    }
+    unreachable;
+}
