@@ -124,3 +124,24 @@ pub fn fileList(alloc: *std.mem.Allocator, dir: std.fs.Dir) ![]string {
     }
     return list.toOwnedSlice();
 }
+
+pub fn dirSize(alloc: *std.mem.Allocator, dir: std.fs.Dir) !usize {
+    var res: usize = 0;
+
+    var walk = try dir.walk(alloc);
+    defer walk.deinit();
+    while (try walk.next()) |entry| {
+        if (entry.kind != .File) {
+            continue;
+        }
+        res += try fileSize(dir, entry.path);
+    }
+    return res;
+}
+
+pub fn fileSize(dir: std.fs.Dir, sub_path: string) !usize {
+    const f = try dir.openFile(sub_path, .{});
+    defer f.close();
+    const s = try f.stat();
+    return s.size;
+}
