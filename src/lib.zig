@@ -141,3 +141,67 @@ pub fn fileSize(dir: std.fs.Dir, sub_path: string) !usize {
     const s = try f.stat();
     return s.size;
 }
+
+pub const HashFn = enum {
+    blake3,
+    gimli,
+    md5,
+    sha1,
+    sha224,
+    sha256,
+    sha384,
+    sha512,
+    sha3_224,
+    sha3_256,
+    sha3_384,
+    sha3_512,
+};
+
+pub fn hashFile(alloc: *std.mem.Allocator, dir: std.fs.Dir, sub_path: string, comptime algo: HashFn) !string {
+    const file = try dir.openFile(sub_path, .{});
+    defer file.close();
+    const hash = std.crypto.hash;
+    const Algo = switch (algo) {
+        .blake3 => hash.Blake3,
+        .gimli => hash.Gimli,
+        .md5 => hash.Md5,
+        .sha1 => hash.Sha1,
+        .sha224 => hash.sha2.Sha224,
+        .sha256 => hash.sha2.Sha256,
+        .sha384 => hash.sha2.Sha384,
+        .sha512 => hash.sha2.Sha512,
+        .sha3_224 => hash.sha3.Sha3_224,
+        .sha3_256 => hash.sha3.Sha3_256,
+        .sha3_384 => hash.sha3.Sha3_384,
+        .sha3_512 => hash.sha3.Sha3_512,
+    };
+    const h = &Algo.init(.{});
+    var out: [Algo.digest_length]u8 = undefined;
+    var hw = HashWriter(Algo){ .h = h };
+    try pipe(file.reader(), hw.writer());
+    h.final(&out);
+
+    var res: [Algo.digest_length * 2]u8 = undefined;
+    var fbs = std.io.fixedBufferStream(&res);
+    try std.fmt.format(fbs.writer(), "{x}", .{std.fmt.fmtSliceHexLower(&out)});
+    return try alloc.dupe(u8, &res);
+}
+
+fn HashWriter(comptime T: type) type {
+    return struct {
+        h: *T,
+
+        const Self = @This();
+        pub const Error = error{};
+        pub const Writer = std.io.Writer(*Self, Error, write);
+
+        fn write(self: *Self, bytes: []const u8) Error!usize {
+            self.h.update(bytes);
+            return bytes.len;
+        }
+
+        pub fn writer(self: *Self) Writer {
+            return .{ .context = self };
+        }
+    };
+}
