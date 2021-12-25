@@ -2,11 +2,11 @@ const std = @import("std");
 const string = []const u8;
 const range = @import("range").range;
 
-pub fn fmtByteCountIEC(alloc: *std.mem.Allocator, b: u64) !string {
+pub fn fmtByteCountIEC(alloc: std.mem.Allocator, b: u64) !string {
     return try reduceNumber(alloc, b, 1024, "B", "KMGTPEZY");
 }
 
-pub fn reduceNumber(alloc: *std.mem.Allocator, input: u64, comptime unit: u64, comptime base: string, comptime prefixes: string) !string {
+pub fn reduceNumber(alloc: std.mem.Allocator, input: u64, comptime unit: u64, comptime base: string, comptime prefixes: string) !string {
     if (input < unit) {
         return std.fmt.allocPrint(alloc, "{d} {s}", .{ input, base });
     }
@@ -24,7 +24,7 @@ pub fn intToFloat(n: u64) f64 {
     return @intToFloat(f64, n);
 }
 
-pub fn addSentinel(alloc: *std.mem.Allocator, comptime T: type, input: []const T, comptime sentinel: T) ![:sentinel]const T {
+pub fn addSentinel(alloc: std.mem.Allocator, comptime T: type, input: []const T, comptime sentinel: T) ![:sentinel]const T {
     var list = try std.ArrayList(T).initCapacity(alloc, input.len + 1);
     try list.appendSlice(input);
     try list.append(sentinel);
@@ -34,7 +34,7 @@ pub fn addSentinel(alloc: *std.mem.Allocator, comptime T: type, input: []const T
 
 const alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
 
-pub fn randomSlice(alloc: *std.mem.Allocator, rand: *const std.rand.Random, comptime T: type, len: usize) ![]T {
+pub fn randomSlice(alloc: std.mem.Allocator, rand: *const std.rand.Random, comptime T: type, len: usize) ![]T {
     var buf = try alloc.alloc(T, len);
     var i: usize = 0;
     while (i < len) : (i += 1) {
@@ -50,13 +50,13 @@ pub fn trimPrefix(in: string, prefix: string) string {
     return in;
 }
 
-pub fn base64EncodeAlloc(alloc: *std.mem.Allocator, input: string) !string {
-    const base64 = std.base64.standard_encoder;
+pub fn base64EncodeAlloc(alloc: std.mem.Allocator, input: string) !string {
+    const base64 = std.base64.standard.Encoder;
     var buf = try alloc.alloc(u8, base64.calcSize(input.len));
     return base64.encode(buf, input);
 }
 
-pub fn asciiUpper(alloc: *std.mem.Allocator, input: string) ![]u8 {
+pub fn asciiUpper(alloc: std.mem.Allocator, input: string) ![]u8 {
     var buf = try alloc.dupe(u8, input);
     for (range(buf.len)) |_, i| {
         buf[i] = std.ascii.toUpper(buf[i]);
@@ -110,7 +110,7 @@ pub fn FieldType(comptime T: type, comptime field: std.meta.FieldEnum(T)) type {
     unreachable;
 }
 
-pub fn fileList(alloc: *std.mem.Allocator, dir: std.fs.Dir) ![]string {
+pub fn fileList(alloc: std.mem.Allocator, dir: std.fs.Dir) ![]string {
     var list = std.ArrayList(string).init(alloc);
     defer list.deinit();
 
@@ -123,7 +123,7 @@ pub fn fileList(alloc: *std.mem.Allocator, dir: std.fs.Dir) ![]string {
     return list.toOwnedSlice();
 }
 
-pub fn dirSize(alloc: *std.mem.Allocator, dir: std.fs.Dir) !usize {
+pub fn dirSize(alloc: std.mem.Allocator, dir: std.fs.Dir) !usize {
     var res: usize = 0;
 
     var walk = try dir.walk(alloc);
@@ -157,7 +157,7 @@ pub const HashFn = enum {
     sha3_512,
 };
 
-pub fn hashFile(alloc: *std.mem.Allocator, dir: std.fs.Dir, sub_path: string, comptime algo: HashFn) !string {
+pub fn hashFile(alloc: std.mem.Allocator, dir: std.fs.Dir, sub_path: string, comptime algo: HashFn) !string {
     const file = try dir.openFile(sub_path, .{});
     defer file.close();
     const hash = std.crypto.hash;
