@@ -34,7 +34,7 @@ pub fn addSentinel(alloc: std.mem.Allocator, comptime T: type, input: []const T,
 
 const alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
 
-pub fn randomSlice(alloc: std.mem.Allocator, rand: *const std.rand.Random, comptime T: type, len: usize) ![]T {
+pub fn randomSlice(alloc: std.mem.Allocator, rand: std.rand.Random, comptime T: type, len: usize) ![]T {
     var buf = try alloc.alloc(T, len);
     var i: usize = 0;
     while (i < len) : (i += 1) {
