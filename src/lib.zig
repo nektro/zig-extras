@@ -207,3 +207,26 @@ pub fn pipe(reader_from: anytype, writer_to: anytype) !void {
     defer fifo.deinit();
     try fifo.pump(reader_from, writer_to);
 }
+
+pub fn StringerJsonStringifyMixin(comptime S: type) type {
+    return struct {
+        pub fn jsonStringify(self: S, options: std.json.StringifyOptions, out_stream: anytype) !void {
+            var buf: [1024]u8 = undefined;
+            var fba = std.heap.FixedBufferAllocator.init(&buf);
+            const alloc = fba.allocator();
+            var list = std.ArrayList(u8).init(alloc);
+            errdefer list.deinit();
+            const writer = list.writer();
+            try writer.writeAll(try self.toString(alloc));
+            try std.json.stringify(list.toOwnedSlice(), options, out_stream);
+        }
+    };
+}
+
+pub fn TagNameJsonStringifyMixin(comptime S: type) type {
+    return struct {
+        pub fn jsonStringify(self: S, options: std.json.StringifyOptions, out_stream: anytype) !void {
+            try std.json.stringify(@tagName(self), options, out_stream);
+        }
+    };
+}
