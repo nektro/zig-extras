@@ -230,3 +230,14 @@ pub fn TagNameJsonStringifyMixin(comptime S: type) type {
         }
     };
 }
+
+pub fn countScalar(comptime T: type, haystack: []const T, needle: T) usize {
+    var found: usize = 0;
+
+    for (haystack) |item| {
+        if (item == needle) {
+            found += 1;
+        }
+    }
+    return found;
+}
