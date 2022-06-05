@@ -252,3 +252,11 @@ pub fn FieldsTuple(comptime T: type) type {
     }
     return std.meta.Tuple(&types);
 }
+
+pub fn positionalInit(comptime T: type, args: FieldsTuple(T)) T {
+    var t: T = undefined;
+    inline for (std.meta.fields(T)) |field, i| {
+        @field(t, field.name) = args[i];
+    }
+    return t;
+}
