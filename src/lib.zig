@@ -226,3 +226,11 @@ pub fn ptrCast(comptime T: type, ptr: *anyopaque) *T {
     if (@alignOf(T) == 0) @compileError(@typeName(T));
     return @ptrCast(*T, @alignCast(@alignOf(T), ptr));
 }
+
+pub fn sortBy(comptime T: type, items: []T, comptime field: std.meta.FieldEnum(T)) void {
+    std.sort.sort(T, items, {}, struct {
+        fn f(_: void, lhs: T, rhs: T) bool {
+            return @field(lhs, @tagName(field)) < @field(rhs, @tagName(field));
+        }
+    }.f);
+}
