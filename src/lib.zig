@@ -223,5 +223,6 @@ pub fn countScalar(comptime T: type, haystack: []const T, needle: T) usize {
 }
 
 pub fn ptrCast(comptime T: type, ptr: *anyopaque) *T {
+    if (@alignOf(T) == 0) @compileError(@typeName(T));
     return @ptrCast(*T, @alignCast(@alignOf(T), ptr));
 }
