@@ -170,35 +170,15 @@ pub fn hashFile(alloc: std.mem.Allocator, dir: std.fs.Dir, sub_path: string, com
         .sha3_384 => hash.sha3.Sha3_384,
         .sha3_512 => hash.sha3.Sha3_512,
     };
-    const h = &Algo.init(.{});
+    var h = Algo.init(.{});
     var out: [Algo.digest_length]u8 = undefined;
-    var hw = HashWriter(Algo){ .h = h };
-    try pipe(file.reader(), hw.writer());
+    try pipe(file.reader(), h.writer());
     h.final(&out);
 
     var res: [Algo.digest_length * 2]u8 = undefined;
     var fbs = std.io.fixedBufferStream(&res);
     try std.fmt.format(fbs.writer(), "{x}", .{std.fmt.fmtSliceHexLower(&out)});
     return try alloc.dupe(u8, &res);
-}
-
-fn HashWriter(comptime T: type) type {
-    return struct {
-        h: *T,
-
-        const Self = @This();
-        pub const Error = error{};
-        pub const Writer = std.io.Writer(*Self, Error, write);
-
-        fn write(self: *Self, bytes: []const u8) Error!usize {
-            self.h.update(bytes);
-            return bytes.len;
-        }
-
-        pub fn writer(self: *Self) Writer {
-            return .{ .context = self };
-        }
-    };
 }
 
 pub fn pipe(reader_from: anytype, writer_to: anytype) !void {
