@@ -243,3 +243,12 @@ pub fn containsString(haystack: []const string, needle: string) bool {
     }
     return false;
 }
+
+pub fn FieldsTuple(comptime T: type) type {
+    const fields = std.meta.fields(T);
+    var types: [fields.len]type = undefined;
+    for (fields) |item, i| {
+        types[i] = item.field_type;
+    }
+    return std.meta.Tuple(&types);
+}
