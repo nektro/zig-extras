@@ -265,3 +265,7 @@ pub fn positionalInit(comptime T: type, args: FieldsTuple(T)) T {
     }
     return t;
 }
+
+pub fn d2index(d1len: usize, d1: usize, d2: usize) usize {
+    return (d1len * d2) + d1;
+}
