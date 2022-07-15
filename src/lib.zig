@@ -269,3 +269,9 @@ pub fn positionalInit(comptime T: type, args: FieldsTuple(T)) T {
 pub fn d2index(d1len: usize, d1: usize, d2: usize) usize {
     return (d1len * d2) + d1;
 }
+
+pub fn ensureFieldSubset(comptime L: type, comptime R: type) void {
+    for (std.meta.fields(L)) |item| {
+        if (!@hasField(R, item.name)) @compileError(std.fmt.comptimePrint("{s} is missing the {s} field from {s}", .{ R, item.name, L }));
+    }
+}
