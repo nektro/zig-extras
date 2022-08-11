@@ -105,7 +105,7 @@ pub fn FieldType(comptime T: type, comptime field: std.meta.FieldEnum(T)) type {
     return std.meta.fieldInfo(T, field).field_type;
 }
 
-pub fn fileList(alloc: std.mem.Allocator, dir: std.fs.Dir) ![]string {
+pub fn fileList(alloc: std.mem.Allocator, dir: std.fs.IterableDir) ![]string {
     var list = std.ArrayList(string).init(alloc);
     defer list.deinit();
 
@@ -118,14 +118,14 @@ pub fn fileList(alloc: std.mem.Allocator, dir: std.fs.Dir) ![]string {
     return list.toOwnedSlice();
 }
 
-pub fn dirSize(alloc: std.mem.Allocator, dir: std.fs.Dir) !u64 {
+pub fn dirSize(alloc: std.mem.Allocator, dir: std.fs.IterableDir) !u64 {
     var res: u64 = 0;
 
     var walk = try dir.walk(alloc);
     defer walk.deinit();
     while (try walk.next()) |entry| {
         if (entry.kind != .File) continue;
-        res += try fileSize(dir, entry.path);
+        res += try fileSize(dir.dir, entry.path);
     }
     return res;
 }
