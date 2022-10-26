@@ -275,3 +275,16 @@ pub fn ensureFieldSubset(comptime L: type, comptime R: type) void {
         if (!@hasField(R, item.name)) @compileError(std.fmt.comptimePrint("{s} is missing the {s} field from {s}", .{ R, item.name, L }));
     }
 }
+
+pub fn fmtReplacer(bytes: string, from: u8, to: u8) std.fmt.Formatter(formatReplacer) {
+    return .{ .data = .{ .bytes = bytes, .from = from, .to = to } };
+}
+
+const ReplacerData = struct { bytes: string, from: u8, to: u8 };
+fn formatReplacer(self: ReplacerData, comptime fmt: []const u8, options: std.fmt.FormatOptions, writer: anytype) !void {
+    _ = fmt;
+    _ = options;
+    for (self.bytes) |c| {
+        try writer.writeByte(if (c == self.from) self.to else @intCast(u8, c));
+    }
+}
