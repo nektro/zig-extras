@@ -1,5 +1,7 @@
 const std = @import("std");
 const string = []const u8;
+const assert = std.debug.assert;
+
 pub const range = @import("range").range;
 
 pub fn fmtByteCountIEC(alloc: std.mem.Allocator, b: u64) !string {
@@ -287,4 +289,83 @@ fn formatReplacer(self: ReplacerData, comptime fmt: []const u8, options: std.fmt
     for (self.bytes) |c| {
         try writer.writeByte(if (c == self.from) self.to else @intCast(u8, c));
     }
+}
+
+pub fn randomBytes(comptime len: usize) [len]u8 {
+    var bytes: [len]u8 = undefined;
+    std.crypto.random.bytes(&bytes);
+    return bytes;
+}
+
+pub fn writeEnumBig(writer: anytype, comptime E: type, value: E) !void {
+    try writer.writeIntBig(@typeInfo(E).Enum.tag_type, @enumToInt(value));
+}
+
+pub fn readExpected(reader: anytype, expected: []const u8) !bool {
+    for (expected) |item, i| {
+        const actual = try reader.readByte();
+        if (actual != item) {
+            std.log.err("expected '{d}' at index {d}, found: '{d}'", .{ item, i, actual });
+            return false;
+        }
+    }
+    return true;
+}
+
+pub fn readBytes(reader: anytype, comptime len: usize) ![len]u8 {
+    var bytes: [len]u8 = undefined;
+    assert(try reader.readAll(&bytes) == len);
+    return bytes;
+}
+
+pub fn FixedMaxBuffer(comptime max_len: usize) type {
+    return struct {
+        buf: [max_len]u8,
+        len: usize,
+        pos: usize,
+
+        const Self = @This();
+        pub const Reader = std.io.Reader(*Self, error{}, read);
+
+        pub fn init(r: anytype, runtime_len: usize) !Self {
+            var fmr = Self{
+                .buf = undefined,
+                .len = runtime_len,
+                .pos = 0,
+            };
+            _ = try r.readAll(fmr.buf[0..runtime_len]);
+            return fmr;
+        }
+
+        pub fn reader(self: *Self) Reader {
+            return .{ .context = self };
+        }
+
+        fn read(self: *Self, dest: []u8) error{}!usize {
+            const buf = self.buf[0..self.len];
+            const size = std.math.min(dest.len, buf.len - self.pos);
+            const end = self.pos + size;
+            std.mem.copy(u8, dest[0..size], buf[self.pos..end]);
+            self.pos = end;
+            return size;
+        }
+
+        pub fn readLen(self: *Self, len: usize) []const u8 {
+            assert(self.pos + len <= self.len);
+            defer self.pos += len;
+            return self.buf[self.pos..][0..len];
+        }
+
+        pub fn atEnd(self: *const Self) bool {
+            return self.pos == self.len;
+        }
+    };
+}
+
+pub fn hashBytes(comptime Algo: type, bytes: []const u8) [Algo.digest_length]u8 {
+    var h = Algo.init(.{});
+    var out: [Algo.digest_length]u8 = undefined;
+    h.update(bytes);
+    h.final(&out);
+    return out;
 }
