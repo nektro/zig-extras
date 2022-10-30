@@ -301,6 +301,10 @@ pub fn writeEnumBig(writer: anytype, comptime E: type, value: E) !void {
     try writer.writeIntBig(@typeInfo(E).Enum.tag_type, @enumToInt(value));
 }
 
+pub fn readEnumBig(reader: anytype, comptime E: type) !E {
+    return @intToEnum(E, try reader.readIntBig(@typeInfo(E).Enum.tag_type));
+}
+
 pub fn readExpected(reader: anytype, expected: []const u8) !bool {
     for (expected) |item, i| {
         const actual = try reader.readByte();
