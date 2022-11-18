@@ -5,7 +5,7 @@ const assert = std.debug.assert;
 pub const range = @import("range").range;
 
 pub fn fmtByteCountIEC(alloc: std.mem.Allocator, b: u64) !string {
-    return try reduceNumber(alloc, b, 1024, "B", "KMGTPEZY");
+    return try reduceNumber(alloc, b, 1024, "B", "KMGTPEZYRQ");
 }
 
 pub fn reduceNumber(alloc: std.mem.Allocator, input: u64, comptime unit: u64, comptime base: string, comptime prefixes: string) !string {
