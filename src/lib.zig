@@ -52,6 +52,13 @@ pub fn trimPrefix(in: string, prefix: string) string {
     return in;
 }
 
+pub fn trimSuffix(in: string, suffix: string) string {
+    if (std.mem.endsWith(u8, in, suffix)) {
+        return in[0 .. in.len - suffix.len];
+    }
+    return in;
+}
+
 pub fn base64EncodeAlloc(alloc: std.mem.Allocator, input: string) !string {
     const base64 = std.base64.standard.Encoder;
     var buf = try alloc.alloc(u8, base64.calcSize(input.len));
