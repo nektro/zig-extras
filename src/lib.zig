@@ -111,7 +111,7 @@ pub fn sliceToInt(comptime T: type, comptime E: type, slice: []const E) !T {
 }
 
 pub fn FieldType(comptime T: type, comptime field: std.meta.FieldEnum(T)) type {
-    return std.meta.fieldInfo(T, field).field_type;
+    return std.meta.fieldInfo(T, field).type;
 }
 
 pub fn fileList(alloc: std.mem.Allocator, dir: std.fs.IterableDir) ![]string {
@@ -231,7 +231,7 @@ pub fn FieldsTuple(comptime T: type) type {
     const fields = std.meta.fields(T);
     var types: [fields.len]type = undefined;
     for (fields) |item, i| {
-        types[i] = item.field_type;
+        types[i] = item.type;
     }
     return std.meta.Tuple(&types);
 }
