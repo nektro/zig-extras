@@ -349,3 +349,30 @@ pub fn hashBytes(comptime Algo: type, bytes: []const u8) [Algo.digest_length]u8 
     h.final(&out);
     return out;
 }
+
+pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !T {
+    return switch (@typeInfo(T)) {
+        .Struct => |t| {
+            switch (t.layout) {
+                .Auto, .Extern => {
+                    var s: T = undefined;
+                    inline for (std.meta.fields(T)) |field| {
+                        @field(s, field.name) = try readType(reader, field.type, endian);
+                    }
+                    return s;
+                },
+                .Packed => return @bitCast(T, try readType(reader, t.backing_integer.?, endian)),
+            }
+        },
+        .Array => |t| {
+            var s: T = undefined;
+            for (range(t.len)) |_, i| {
+                s[i] = try readType(reader, t.child, endian);
+            }
+            return s;
+        },
+        .Int => try reader.readInt(T, endian),
+        .Enum => |t| @intToEnum(T, try readType(reader, t.tag_type, endian)),
+        else => |e| @compileError(@tagName(e)),
+    };
+}
