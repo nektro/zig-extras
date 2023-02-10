@@ -379,7 +379,7 @@ pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !
 
 pub fn indexBufferT(bytes: []const u8, comptime T: type, endian: std.builtin.Endian, idx: usize, max_len: usize) T {
     std.debug.assert(idx < max_len);
-    var fbs = std.io.fixedBufferStream(bytes[idx * (@sizeOf(T) / @sizeOf(u8)) ..]);
+    var fbs = std.io.fixedBufferStream(bytes[idx * @sizeOf(T) ..]);
     return readType(fbs.reader(), T, endian) catch |err| switch (err) {
         error.EndOfStream => unreachable, // assert above has been violated
     };
