@@ -387,20 +387,21 @@ pub fn indexBufferT(bytes: []const u8, comptime T: type, endian: std.builtin.End
 
 pub fn BufIndexer(comptime T: type, comptime endian: std.builtin.Endian) type {
     return struct {
-        bytes: []const u8,
+        bytes: [*]const u8,
         max_len: usize,
 
         const Self = @This();
 
         pub fn init(bytes: []const u8, max_len: usize) Self {
+            std.debug.assert(bytes.len >= @sizeOf(T) * max_len);
             return .{
-                .bytes = bytes,
+                .bytes = bytes.ptr,
                 .max_len = max_len,
             };
         }
 
         pub fn at(self: *const Self, idx: usize) T {
-            return indexBufferT(self.bytes, T, endian, idx, self.max_len);
+            return indexBufferT(self.bytes[0 .. @sizeOf(T) * self.max_len], T, endian, idx, self.max_len);
         }
     };
 }
