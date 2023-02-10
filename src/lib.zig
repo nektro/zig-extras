@@ -377,9 +377,9 @@ pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !
     };
 }
 
-pub fn indexBufferT(bytes: []const u8, comptime T: type, endian: std.builtin.Endian, idx: usize, max_len: usize) T {
+pub fn indexBufferT(bytes: [*]const u8, comptime T: type, endian: std.builtin.Endian, idx: usize, max_len: usize) T {
     std.debug.assert(idx < max_len);
-    var fbs = std.io.fixedBufferStream(bytes[idx * @sizeOf(T) ..]);
+    var fbs = std.io.fixedBufferStream((bytes + (idx * @sizeOf(T)))[0..@sizeOf(T)]);
     return readType(fbs.reader(), T, endian) catch |err| switch (err) {
         error.EndOfStream => unreachable, // assert above has been violated
     };
@@ -393,7 +393,6 @@ pub fn BufIndexer(comptime T: type, comptime endian: std.builtin.Endian) type {
         const Self = @This();
 
         pub fn init(bytes: []const u8, max_len: usize) Self {
-            std.debug.assert(bytes.len >= @sizeOf(T) * max_len);
             return .{
                 .bytes = bytes.ptr,
                 .max_len = max_len,
@@ -401,7 +400,7 @@ pub fn BufIndexer(comptime T: type, comptime endian: std.builtin.Endian) type {
         }
 
         pub fn at(self: *const Self, idx: usize) T {
-            return indexBufferT(self.bytes[0 .. @sizeOf(T) * self.max_len], T, endian, idx, self.max_len);
+            return indexBufferT(self.bytes, T, endian, idx, self.max_len);
         }
     };
 }
