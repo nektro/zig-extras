@@ -392,9 +392,9 @@ pub fn BufIndexer(comptime T: type, comptime endian: std.builtin.Endian) type {
 
         const Self = @This();
 
-        pub fn init(bytes: []const u8, max_len: usize) Self {
+        pub fn init(bytes: [*]const u8, max_len: usize) Self {
             return .{
-                .bytes = bytes.ptr,
+                .bytes = bytes,
                 .max_len = max_len,
             };
         }
