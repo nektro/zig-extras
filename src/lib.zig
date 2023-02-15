@@ -2,7 +2,17 @@ const std = @import("std");
 const string = []const u8;
 const assert = std.debug.assert;
 
-pub const range = @import("range").range;
+/// Use this as a way to increment an index using a for loop. Works with both
+/// runtime and comptime integers.
+///
+/// ```zig
+/// for (range(10)) |_, i| {
+///   // 'i' will increment from 0 -> 9
+/// }
+/// ```
+pub fn range(len: usize) []const void {
+    return @as([*]void, undefined)[0..len];
+}
 
 pub fn fmtByteCountIEC(alloc: std.mem.Allocator, b: u64) !string {
     return try reduceNumber(alloc, b, 1024, "B", "KMGTPEZYRQ");
