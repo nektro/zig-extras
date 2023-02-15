@@ -408,3 +408,9 @@ pub fn skipToBoundary(pos: u64, boundary: u64, reader: anytype) !void {
     const b = boundary;
     try reader.skipBytes(((a + (b - 1)) & ~(b - 1)) - a, .{});
 }
+
+/// ?A == A fails
+/// ?A == @as(?A, b) works
+pub fn is(a: anytype, b: @TypeOf(a)) bool {
+    return a == b;
+}
