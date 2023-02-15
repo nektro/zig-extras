@@ -414,3 +414,11 @@ pub fn skipToBoundary(pos: u64, boundary: u64, reader: anytype) !void {
 pub fn is(a: anytype, b: @TypeOf(a)) bool {
     return a == b;
 }
+
+/// Allows u32 + i16 to work
+pub fn safeAdd(a: anytype, b: anytype) @TypeOf(a) {
+    if (b >= 0) {
+        return a + @intCast(@TypeOf(a), b);
+    }
+    return a - @intCast(@TypeOf(a), -b);
+}
