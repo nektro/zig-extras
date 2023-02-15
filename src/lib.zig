@@ -19,11 +19,7 @@ pub fn reduceNumber(alloc: std.mem.Allocator, input: u64, comptime unit: u64, co
         div *= unit;
         exp += 1;
     }
-    return try std.fmt.allocPrint(alloc, "{d:.3} {s}{s}", .{ intToFloat(input) / intToFloat(div), prefixes[exp .. exp + 1], base });
-}
-
-pub fn intToFloat(n: u64) f64 {
-    return @intToFloat(f64, n);
+    return try std.fmt.allocPrint(alloc, "{d:.3} {s}{s}", .{ @intToFloat(f64, input) / @intToFloat(f64, div), prefixes[exp .. exp + 1], base });
 }
 
 pub fn addSentinel(alloc: std.mem.Allocator, comptime T: type, input: []const T, comptime sentinel: T) ![:sentinel]const T {
