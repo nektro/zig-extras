@@ -2,18 +2,6 @@ const std = @import("std");
 const string = []const u8;
 const assert = std.debug.assert;
 
-/// Use this as a way to increment an index using a for loop. Works with both
-/// runtime and comptime integers.
-///
-/// ```zig
-/// for (range(10)) |_, i| {
-///   // 'i' will increment from 0 -> 9
-/// }
-/// ```
-pub fn range(len: usize) []const void {
-    return @as([*]void, undefined)[0..len];
-}
-
 pub fn fmtByteCountIEC(alloc: std.mem.Allocator, b: u64) !string {
     return try reduceNumber(alloc, b, 1024, "B", "KMGTPEZYRQ");
 }
@@ -73,7 +61,7 @@ pub fn base64EncodeAlloc(alloc: std.mem.Allocator, input: string) !string {
 
 pub fn asciiUpper(alloc: std.mem.Allocator, input: string) ![]u8 {
     var buf = try alloc.dupe(u8, input);
-    for (range(buf.len)) |_, i| {
+    for (0..buf.len) |i| {
         buf[i] = std.ascii.toUpper(buf[i]);
     }
     return buf;
@@ -109,7 +97,7 @@ pub fn sliceToInt(comptime T: type, comptime E: type, slice: []const E) !T {
     if (a < b * slice.len) return error.Overflow;
 
     var n: T = 0;
-    for (slice) |item, i| {
+    for (slice, 0..) |item, i| {
         const shift = @intCast(std.math.Log2Int(T), b * (slice.len - 1 - i));
         n = n | (@as(T, item) << shift);
     }
@@ -236,7 +224,7 @@ pub fn containsString(haystack: []const string, needle: string) bool {
 pub fn FieldsTuple(comptime T: type) type {
     const fields = std.meta.fields(T);
     var types: [fields.len]type = undefined;
-    for (fields) |item, i| {
+    for (fields, 0..) |item, i| {
         types[i] = item.type;
     }
     return std.meta.Tuple(&types);
@@ -244,7 +232,7 @@ pub fn FieldsTuple(comptime T: type) type {
 
 pub fn positionalInit(comptime T: type, args: FieldsTuple(T)) T {
     var t: T = undefined;
-    inline for (std.meta.fields(T)) |field, i| {
+    inline for (std.meta.fields(T), 0..) |field, i| {
         @field(t, field.name) = args[i];
     }
     return t;
@@ -288,7 +276,7 @@ pub fn readEnumBig(reader: anytype, comptime E: type) !E {
 }
 
 pub fn readExpected(reader: anytype, expected: []const u8) !bool {
-    for (expected) |item, i| {
+    for (expected, 0..) |item, i| {
         const actual = try reader.readByte();
         if (actual != item) {
             std.log.err("expected '{d}' at index {d}, found: '{d}'", .{ item, i, actual });
@@ -372,7 +360,7 @@ pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !
         },
         .Array => |t| {
             var s: T = undefined;
-            for (range(t.len)) |_, i| {
+            for (0..t.len) |i| {
                 s[i] = try readType(reader, t.child, endian);
             }
             return s;
