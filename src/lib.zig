@@ -276,10 +276,9 @@ pub fn readEnumBig(reader: anytype, comptime E: type) !E {
 }
 
 pub fn readExpected(reader: anytype, expected: []const u8) !bool {
-    for (expected, 0..) |item, i| {
+    for (expected) |item| {
         const actual = try reader.readByte();
         if (actual != item) {
-            std.log.err("expected '{d}' at index {d}, found: '{d}'", .{ item, i, actual });
             return false;
         }
     }
