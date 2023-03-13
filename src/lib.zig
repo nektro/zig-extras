@@ -220,6 +220,18 @@ pub fn sortBySlice(comptime T: type, items: []T, comptime field: std.meta.FieldE
     }.f);
 }
 
+pub fn lessThanSlice(comptime T: type) fn (void, T, T) bool {
+    return struct {
+        fn f(_: void, lhs: T, rhs: T) bool {
+            const result = for (0..@min(lhs.len, rhs.len)) |i| {
+                if (lhs[i] < rhs[i]) break true;
+                if (lhs[i] > rhs[i]) break false;
+            } else false;
+            return result;
+        }
+    }.f;
+}
+
 pub fn containsString(haystack: []const string, needle: string) bool {
     for (haystack) |item| {
         if (std.mem.eql(u8, item, needle)) {
