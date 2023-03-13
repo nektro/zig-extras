@@ -212,6 +212,14 @@ pub fn sortBy(comptime T: type, items: []T, comptime field: std.meta.FieldEnum(T
     }.f);
 }
 
+pub fn sortBySlice(comptime T: type, items: []T, comptime field: std.meta.FieldEnum(T)) void {
+    std.sort.sort(T, items, {}, struct {
+        fn f(_: void, lhs: T, rhs: T) bool {
+            return lessThanSlice(FieldType(T, field))({}, @field(lhs, @tagName(field)), @field(rhs, @tagName(field)));
+        }
+    }.f);
+}
+
 pub fn containsString(haystack: []const string, needle: string) bool {
     for (haystack) |item| {
         if (std.mem.eql(u8, item, needle)) {
