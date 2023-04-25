@@ -448,3 +448,12 @@ pub fn readBytesAlloc(reader: anytype, alloc: std.mem.Allocator, len: usize) ![]
     try reader.readNoEof(list.items[0..len]);
     return list.items;
 }
+
+pub fn readFile(dir: std.fs.Dir, sub_path: string, alloc: std.mem.Allocator) !string {
+    var file = try dir.openFile(sub_path, .{});
+    defer file.close();
+    const stat = try file.stat();
+    var buffer = try std.ArrayList(u8).initCapacity(alloc, stat.size);
+    pipe(file.reader(), buffer.writer()) catch @panic("unreachable"); // did the filesystem lie?
+    return buffer.items;
+}
