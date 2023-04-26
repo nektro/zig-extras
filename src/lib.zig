@@ -457,3 +457,9 @@ pub fn readFile(dir: std.fs.Dir, sub_path: string, alloc: std.mem.Allocator) !st
     pipe(file.reader(), buffer.writer()) catch @panic("unreachable"); // did the filesystem lie?
     return buffer.items;
 }
+
+pub fn nullifyS(s: ?string) ?string {
+    if (s == null) return null;
+    if (s.?.len == 0) return null;
+    return s.?;
+}
