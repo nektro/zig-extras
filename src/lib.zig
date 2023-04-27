@@ -450,12 +450,10 @@ pub fn readBytesAlloc(reader: anytype, alloc: std.mem.Allocator, len: usize) ![]
 }
 
 pub fn readFile(dir: std.fs.Dir, sub_path: string, alloc: std.mem.Allocator) !string {
-    var file = try dir.openFile(sub_path, .{});
-    defer file.close();
-    const stat = try file.stat();
-    var buffer = try std.ArrayList(u8).initCapacity(alloc, stat.size);
-    pipe(file.reader(), buffer.writer()) catch @panic("unreachable"); // did the filesystem lie?
-    return buffer.items;
+    _ = dir;
+    _ = sub_path;
+    _ = alloc;
+    @compileError("use std.fs.Dir.readFileAlloc instead");
 }
 
 pub fn nullifyS(s: ?string) ?string {
