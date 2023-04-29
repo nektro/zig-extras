@@ -461,3 +461,10 @@ pub fn nullifyS(s: ?string) ?string {
     if (s.?.len == 0) return null;
     return s.?;
 }
+
+pub fn sliceTo(comptime T: type, haystack: []const T, needle: T) []const T {
+    if (std.mem.indexOfScalar(T, haystack, needle)) |index| {
+        return haystack[0..index];
+    }
+    return haystack;
+}
