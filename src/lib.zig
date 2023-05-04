@@ -46,11 +46,21 @@ pub fn trimPrefix(in: string, prefix: string) string {
     return in;
 }
 
+pub fn trimPrefixEnsure(in: string, prefix: string) ?string {
+    if (!std.mem.startsWith(u8, in, prefix)) return null;
+    return in[prefix.len..];
+}
+
 pub fn trimSuffix(in: string, suffix: string) string {
     if (std.mem.endsWith(u8, in, suffix)) {
         return in[0 .. in.len - suffix.len];
     }
     return in;
+}
+
+pub fn trimSuffixEnsure(in: string, suffix: string) ?string {
+    if (!std.mem.endsWith(u8, in, suffix)) return null;
+    return in[0 .. in.len - suffix.len];
 }
 
 pub fn base64EncodeAlloc(alloc: std.mem.Allocator, input: string) !string {
