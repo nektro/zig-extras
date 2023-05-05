@@ -478,3 +478,12 @@ pub fn sliceTo(comptime T: type, haystack: []const T, needle: T) []const T {
     }
     return haystack;
 }
+
+pub fn matchesAll(comptime T: type, haystack: []const u8, comptime needle: fn (T) bool) bool {
+    for (haystack) |c| {
+        if (!needle(c)) {
+            return false;
+        }
+    }
+    return true;
+}
