@@ -492,3 +492,8 @@ pub fn opslice(slice: anytype, index: usize) ?std.meta.Child(@TypeOf(slice)) {
     if (slice.len <= index) return null;
     return slice[index];
 }
+
+pub fn assertLog(ok: bool, message: string) void {
+    if (!ok) std.log.err("assertion failure: {s}", .{message});
+    if (!ok) unreachable; // assertion failure
+}
