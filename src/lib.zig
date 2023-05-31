@@ -497,3 +497,8 @@ pub fn assertLog(ok: bool, message: string) void {
     if (!ok) std.log.err("assertion failure: {s}", .{message});
     if (!ok) unreachable; // assertion failure
 }
+
+pub fn parse_json(alloc: std.mem.Allocator, input: string) !std.json.ValueTree {
+    var p = std.json.Parser.init(alloc, .alloc_always);
+    return try p.parse(input);
+}
