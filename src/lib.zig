@@ -85,7 +85,7 @@ pub fn doesFolderExist(dir: ?std.fs.Dir, fpath: []const u8) !bool {
     };
     defer file.close();
     const s = try file.stat();
-    if (s.kind != .Directory) {
+    if (s.kind != .directory) {
         return false;
     }
     return true;
