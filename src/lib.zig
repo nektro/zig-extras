@@ -502,3 +502,15 @@ pub fn parse_json(alloc: std.mem.Allocator, input: string) !std.json.ValueTree {
     var p = std.json.Parser.init(alloc, .alloc_always);
     return try p.parse(input);
 }
+
+pub fn isArrayOf(comptime T: type) std.meta.trait.TraitFn {
+    const Closure = struct {
+        pub fn trait(comptime C: type) bool {
+            return switch (@typeInfo(C)) {
+                .Array => |ti| ti.child == T,
+                else => false,
+            };
+        }
+    };
+    return Closure.trait;
+}
