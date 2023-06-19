@@ -125,7 +125,7 @@ pub fn fileList(alloc: std.mem.Allocator, dir: std.fs.IterableDir) ![]string {
     var walk = try dir.walk(alloc);
     defer walk.deinit();
     while (try walk.next()) |entry| {
-        if (entry.kind != .File) continue;
+        if (entry.kind != .file) continue;
         try list.append(try alloc.dupe(u8, entry.path));
     }
     return list.toOwnedSlice();
