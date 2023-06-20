@@ -514,3 +514,8 @@ pub fn isArrayOf(comptime T: type) std.meta.trait.TraitFn {
     };
     return Closure.trait;
 }
+
+pub fn parse_int(comptime T: type, s: ?string, b: u8, d: T) T {
+    if (s == null) return d;
+    return std.fmt.parseInt(T, s.?, b) catch d;
+}
