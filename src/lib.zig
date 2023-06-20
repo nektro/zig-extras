@@ -519,3 +519,7 @@ pub fn parse_int(comptime T: type, s: ?string, b: u8, d: T) T {
     if (s == null) return d;
     return std.fmt.parseInt(T, s.?, b) catch d;
 }
+
+pub fn parse_bool(s: ?string) bool {
+    return parse_int(u1, s, 10, 0) > 0;
+}
