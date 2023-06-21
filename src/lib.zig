@@ -523,3 +523,10 @@ pub fn parse_int(comptime T: type, s: ?string, b: u8, d: T) T {
 pub fn parse_bool(s: ?string) bool {
     return parse_int(u1, s, 10, 0) > 0;
 }
+
+pub fn to_hex(array: anytype) [array.len * 2]u8 {
+    var res: [array.len * 2]u8 = undefined;
+    var fbs = std.io.fixedBufferStream(&res);
+    std.fmt.format(fbs.writer(), "{x}", .{std.fmt.fmtSliceHexLower(&array)}) catch unreachable;
+    return res;
+}
