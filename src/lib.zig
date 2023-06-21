@@ -488,6 +488,15 @@ pub fn matchesAll(comptime T: type, haystack: []const u8, comptime needle: fn (T
     return true;
 }
 
+pub fn matchesAny(comptime T: type, haystack: []const u8, comptime needle: fn (T) bool) bool {
+    for (haystack) |c| {
+        if (needle(c)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 pub fn opslice(slice: anytype, index: usize) ?std.meta.Child(@TypeOf(slice)) {
     if (slice.len <= index) return null;
     return slice[index];
