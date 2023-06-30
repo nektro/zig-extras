@@ -69,6 +69,13 @@ pub fn base64EncodeAlloc(alloc: std.mem.Allocator, input: string) !string {
     return base64.encode(buf, input);
 }
 
+pub fn base64DecodeAlloc(alloc: std.mem.Allocator, input: string) !string {
+    const base64 = std.base64.standard.Decoder;
+    var buf = try alloc.alloc(u8, try base64.calcSizeForSlice(input));
+    try base64.decode(buf, input);
+    return buf;
+}
+
 pub fn asciiUpper(alloc: std.mem.Allocator, input: string) ![]u8 {
     var buf = try alloc.dupe(u8, input);
     for (0..buf.len) |i| {
