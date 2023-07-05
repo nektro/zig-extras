@@ -121,10 +121,6 @@ pub fn sliceToInt(comptime T: type, comptime E: type, slice: []const E) !T {
     return n;
 }
 
-pub fn FieldType(comptime T: type, comptime field: std.meta.FieldEnum(T)) type {
-    return std.meta.fieldInfo(T, field).type;
-}
-
 pub fn fileList(alloc: std.mem.Allocator, dir: std.fs.IterableDir) ![]string {
     var list = std.ArrayList(string).init(alloc);
     defer list.deinit();
@@ -232,7 +228,7 @@ pub fn sortBy(comptime T: type, items: []T, comptime field: std.meta.FieldEnum(T
 pub fn sortBySlice(comptime T: type, items: []T, comptime field: std.meta.FieldEnum(T)) void {
     std.sort.sort(T, items, {}, struct {
         fn f(_: void, lhs: T, rhs: T) bool {
-            return lessThanSlice(FieldType(T, field))({}, @field(lhs, @tagName(field)), @field(rhs, @tagName(field)));
+            return lessThanSlice(std.meta.FieldType(T, field))({}, @field(lhs, @tagName(field)), @field(rhs, @tagName(field)));
         }
     }.f);
 }
