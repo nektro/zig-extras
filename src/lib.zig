@@ -614,3 +614,32 @@ pub fn LoggingWriter(comptime T: type, comptime scope: @Type(.EnumLiteral)) type
         }
     };
 }
+
+pub fn Partial(comptime T: type) type {
+    const fields_before = std.meta.fields(T);
+    var fields_after: [fields_before.len]std.builtin.Type.StructField = undefined;
+    inline for (fields_before, 0..) |item, i| {
+        fields_after[i] = std.builtin.Type.StructField{
+            .name = item.name,
+            .type = ?item.type,
+            .default_value = &@as(?item.type, null),
+            .is_comptime = false,
+            .alignment = @alignOf(?item.type),
+        };
+    }
+    return @Type(@unionInit(std.builtin.Type, "Struct", .{
+        .layout = .Auto,
+        .backing_integer = null,
+        .fields = &fields_after,
+        .decls = &.{},
+        .is_tuple = false,
+    }));
+}
+
+pub fn coalescePartial(comptime T: type, into: T, from: Partial(T)) T {
+    var temp = into;
+    inline for (comptime std.meta.fieldNames(T)) |name| {
+        if (@field(from, name)) |val| @field(temp, name) = val;
+    }
+    return temp;
+}
