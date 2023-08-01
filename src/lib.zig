@@ -482,7 +482,7 @@ pub fn sliceTo(comptime T: type, haystack: []const T, needle: T) []const T {
     return haystack;
 }
 
-pub fn matchesAll(comptime T: type, haystack: []const u8, comptime needle: fn (T) bool) bool {
+pub fn matchesAll(comptime T: type, haystack: []const T, comptime needle: fn (T) bool) bool {
     for (haystack) |c| {
         if (!needle(c)) {
             return false;
@@ -491,7 +491,7 @@ pub fn matchesAll(comptime T: type, haystack: []const u8, comptime needle: fn (T
     return true;
 }
 
-pub fn matchesAny(comptime T: type, haystack: []const u8, comptime needle: fn (T) bool) bool {
+pub fn matchesAny(comptime T: type, haystack: []const T, comptime needle: fn (T) bool) bool {
     for (haystack) |c| {
         if (needle(c)) {
             return true;
