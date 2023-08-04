@@ -17,7 +17,7 @@ pub fn reduceNumber(alloc: std.mem.Allocator, input: u64, comptime unit: u64, co
         div *= unit;
         exp += 1;
     }
-    return try std.fmt.allocPrint(alloc, "{d:.3} {s}{s}", .{ @intToFloat(f64, input) / @intToFloat(f64, div), prefixes[exp .. exp + 1], base });
+    return try std.fmt.allocPrint(alloc, "{d:.3} {s}{s}", .{ @as(f64, @floatFromInt(input)) / @as(f64, @floatFromInt(div)), prefixes[exp .. exp + 1], base });
 }
 
 pub fn addSentinel(alloc: std.mem.Allocator, comptime T: type, input: []const T, comptime sentinel: T) ![:sentinel]const T {
@@ -115,7 +115,7 @@ pub fn sliceToInt(comptime T: type, comptime E: type, slice: []const E) !T {
 
     var n: T = 0;
     for (slice, 0..) |item, i| {
-        const shift = @intCast(std.math.Log2Int(T), b * (slice.len - 1 - i));
+        const shift: std.math.Log2Int(T) = @intCast(b * (slice.len - 1 - i));
         n = n | (@as(T, item) << shift);
     }
     return n;
@@ -209,12 +209,12 @@ pub fn countScalar(comptime T: type, haystack: []const T, needle: T) usize {
 
 pub fn ptrCast(comptime T: type, ptr: *anyopaque) *T {
     if (@alignOf(T) == 0) @compileError(@typeName(T));
-    return @ptrCast(*T, @alignCast(@alignOf(T), ptr));
+    return @ptrCast(@alignCast(ptr));
 }
 
 pub fn ptrCastConst(comptime T: type, ptr: *const anyopaque) *const T {
     if (@alignOf(T) == 0) @compileError(@typeName(T));
-    return @ptrCast(*const T, @alignCast(@alignOf(T), ptr));
+    return @ptrCast(@alignCast(ptr));
 }
 
 pub fn sortBy(comptime T: type, items: []T, comptime field: std.meta.FieldEnum(T)) void {
@@ -290,7 +290,7 @@ fn formatReplacer(self: ReplacerData, comptime fmt: []const u8, options: std.fmt
     _ = fmt;
     _ = options;
     for (self.bytes) |c| {
-        try writer.writeByte(if (c == self.from) self.to else @intCast(u8, c));
+        try writer.writeByte(if (c == self.from) self.to else @intCast(c));
     }
 }
 
@@ -301,11 +301,11 @@ pub fn randomBytes(comptime len: usize) [len]u8 {
 }
 
 pub fn writeEnumBig(writer: anytype, comptime E: type, value: E) !void {
-    try writer.writeIntBig(@typeInfo(E).Enum.tag_type, @enumToInt(value));
+    try writer.writeIntBig(@typeInfo(E).Enum.tag_type, @intFromEnum(value));
 }
 
 pub fn readEnumBig(reader: anytype, comptime E: type) !E {
-    return @intToEnum(E, try reader.readIntBig(@typeInfo(E).Enum.tag_type));
+    return @enumFromInt(try reader.readIntBig(@typeInfo(E).Enum.tag_type));
 }
 
 pub fn readExpected(reader: anytype, expected: []const u8) !bool {
@@ -349,7 +349,7 @@ pub fn FixedMaxBuffer(comptime max_len: usize) type {
 
         fn read(self: *Self, dest: []u8) error{}!usize {
             const buf = self.buf[0..self.len];
-            const size = std.math.min(dest.len, buf.len - self.pos);
+            const size = @min(dest.len, buf.len - self.pos);
             const end = self.pos + size;
             std.mem.copy(u8, dest[0..size], buf[self.pos..end]);
             self.pos = end;
@@ -387,7 +387,7 @@ pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !
                     }
                     return s;
                 },
-                .Packed => return @bitCast(T, try readType(reader, t.backing_integer.?, endian)),
+                .Packed => return @bitCast(try readType(reader, t.backing_integer.?, endian)),
             }
         },
         .Array => |t| {
@@ -398,7 +398,7 @@ pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !
             return s;
         },
         .Int => try reader.readInt(T, endian),
-        .Enum => |t| @intToEnum(T, try readType(reader, t.tag_type, endian)),
+        .Enum => |t| @enumFromInt(try readType(reader, t.tag_type, endian)),
         else => |e| @compileError(@tagName(e)),
     };
 }
@@ -448,9 +448,9 @@ pub fn is(a: anytype, b: @TypeOf(a)) bool {
 /// Allows u32 + i16 to work
 pub fn safeAdd(a: anytype, b: anytype) @TypeOf(a) {
     if (b >= 0) {
-        return a + @intCast(@TypeOf(a), b);
+        return a + @as(@TypeOf(a), @intCast(b));
     }
-    return a - @intCast(@TypeOf(a), -b);
+    return a - @as(@TypeOf(a), @intCast(-b));
 }
 
 pub fn readBytesAlloc(reader: anytype, alloc: std.mem.Allocator, len: usize) ![]u8 {
@@ -510,9 +510,8 @@ pub fn assertLog(ok: bool, comptime message: string, args: anytype) void {
     if (!ok) unreachable; // assertion failure
 }
 
-pub fn parse_json(alloc: std.mem.Allocator, input: string) !std.json.ValueTree {
-    var p = std.json.Parser.init(alloc, .alloc_always);
-    return try p.parse(input);
+pub fn parse_json(alloc: std.mem.Allocator, input: string) !std.json.Parsed(std.json.Value) {
+    return std.json.parseFromSlice(std.json.Value, alloc, input, .{});
 }
 
 pub fn isArrayOf(comptime T: type) std.meta.trait.TraitFn {
