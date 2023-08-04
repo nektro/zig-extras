@@ -642,3 +642,11 @@ pub fn coalescePartial(comptime T: type, into: T, from: Partial(T)) T {
     }
     return temp;
 }
+
+pub fn joinPartial(comptime P: type, a: P, b: P) P {
+    var temp = a;
+    inline for (comptime std.meta.fieldNames(P)) |name| {
+        if (@field(b, name)) |val| @field(temp, name) = val;
+    }
+    return temp;
+}
