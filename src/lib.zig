@@ -454,6 +454,14 @@ pub fn safeAdd(a: anytype, b: anytype) @TypeOf(a) {
     return a - @as(@TypeOf(a), @intCast(-@as(OneBiggerInt(@TypeOf(b)), b)));
 }
 
+/// Allows u32 + i16 to work
+pub fn safeAddWrap(a: anytype, b: anytype) @TypeOf(a) {
+    if (b >= 0) {
+        return a +% @as(@TypeOf(a), @intCast(b));
+    }
+    return a -% @as(@TypeOf(a), @intCast(-@as(OneBiggerInt(@TypeOf(b)), b)));
+}
+
 pub fn readBytesAlloc(reader: anytype, alloc: std.mem.Allocator, len: usize) ![]u8 {
     var list = std.ArrayListUnmanaged(u8){};
     try list.ensureTotalCapacityPrecise(alloc, len);
