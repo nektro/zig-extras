@@ -451,7 +451,7 @@ pub fn safeAdd(a: anytype, b: anytype) @TypeOf(a) {
     if (b >= 0) {
         return a + @as(@TypeOf(a), @intCast(b));
     }
-    return a - @as(@TypeOf(a), @intCast(-b));
+    return a - @as(@TypeOf(a), @intCast(-@as(OneBiggerInt(@TypeOf(b)), b)));
 }
 
 pub fn readBytesAlloc(reader: anytype, alloc: std.mem.Allocator, len: usize) ![]u8 {
@@ -650,4 +650,10 @@ pub fn joinPartial(comptime P: type, a: P, b: P) P {
         if (@field(b, name)) |val| @field(temp, name) = val;
     }
     return temp;
+}
+
+pub fn OneBiggerInt(comptime T: type) type {
+    var info = @typeInfo(T);
+    info.Int.bits += 1;
+    return @Type(info);
 }
