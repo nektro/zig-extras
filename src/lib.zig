@@ -377,6 +377,7 @@ pub fn hashBytes(comptime Algo: type, bytes: []const u8) [Algo.digest_length]u8 
 }
 
 pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !T {
+    if (T == u8) return reader.readByte(); // single bytes dont have an endianness
     return switch (@typeInfo(T)) {
         .Struct => |t| {
             switch (t.layout) {
