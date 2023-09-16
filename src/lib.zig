@@ -680,3 +680,12 @@ pub fn ReverseFields(comptime T: type) type {
 pub fn stringToEnum(comptime E: type, str: ?string) ?E {
     return std.meta.stringToEnum(E, str orelse return null);
 }
+
+pub fn containsAggregate(comptime T: type, haystack: []const T, needle: T) bool {
+    for (haystack) |item| {
+        if (T.eql(item, needle)) {
+            return true;
+        }
+    }
+    return false;
+}
