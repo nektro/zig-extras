@@ -676,3 +676,7 @@ pub fn ReverseFields(comptime T: type) type {
     info.fields = &fields;
     return @Type(.{ .Struct = info });
 }
+
+pub fn stringToEnum(comptime E: type, str: ?string) ?E {
+    return std.meta.stringToEnum(E, str orelse return null);
+}
