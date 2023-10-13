@@ -752,4 +752,40 @@ pub const AnyReader = struct {
         }
         return index;
     }
+
+    pub fn readAllAlloc(self: AnyReader, allocator: std.mem.Allocator, max_size: usize) ![]u8 {
+        var array_list = std.ArrayList(u8).init(allocator);
+        defer array_list.deinit();
+        try self.readAllArrayList(&array_list, max_size);
+        return try array_list.toOwnedSlice();
+    }
+
+    pub fn readAllArrayList(self: AnyReader, array_list: *std.ArrayList(u8), max_append_size: usize) !void {
+        return self.readAllArrayListAligned(null, array_list, max_append_size);
+    }
+
+    pub fn readAllArrayListAligned(self: AnyReader, comptime alignment: ?u29, array_list: *std.ArrayListAligned(u8, alignment), max_append_size: usize) !void {
+        try array_list.ensureTotalCapacity(@min(max_append_size, 4096));
+        const original_len = array_list.items.len;
+        var start_index: usize = original_len;
+        while (true) {
+            array_list.expandToCapacity();
+            const dest_slice = array_list.items[start_index..];
+            const bytes_read = try self.readAll(dest_slice);
+            start_index += bytes_read;
+
+            if (start_index - original_len > max_append_size) {
+                array_list.shrinkAndFree(original_len + max_append_size);
+                return error.StreamTooLong;
+            }
+
+            if (bytes_read != dest_slice.len) {
+                array_list.shrinkAndFree(start_index);
+                return;
+            }
+
+            // This will trigger ArrayList to expand superlinearly at whatever its growth rate is.
+            try array_list.ensureTotalCapacity(start_index + 1);
+        }
+    }
 };
