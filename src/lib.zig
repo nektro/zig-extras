@@ -698,17 +698,36 @@ pub const AnyReader = struct {
         const R = @TypeOf(reader);
         const ctx = reader.context;
         const Ctx = @TypeOf(ctx);
-        comptime std.debug.assert(std.meta.trait.is(.Pointer)(Ctx));
-        const S = struct {
-            fn foo(s: *anyopaque, buffer: []u8) anyerror!usize {
-                const r = R{ .context = @ptrCast(@alignCast(s)) };
-                return r.read(buffer);
-            }
-        };
-        return .{
-            .readFn = S.foo,
-            .state = ctx,
-        };
+        switch (@typeInfo(Ctx)) {
+            .Pointer => {
+                const S = struct {
+                    fn foo(s: *anyopaque, buffer: []u8) anyerror!usize {
+                        const r = R{ .context = @ptrCast(@alignCast(s)) };
+                        return r.read(buffer);
+                    }
+                };
+                return .{
+                    .readFn = S.foo,
+                    .state = ctx,
+                };
+            },
+            .Struct => switch (R) {
+                std.fs.File.Reader => {
+                    const S = struct {
+                        fn foo(s: *anyopaque, buffer: []u8) anyerror!usize {
+                            const r = R{ .context = .{ .handle = @intCast(@intFromPtr(s)) } };
+                            return r.read(buffer);
+                        }
+                    };
+                    return .{
+                        .readFn = S.foo,
+                        .state = @ptrFromInt(@as(usize, @intCast(ctx.handle))),
+                    };
+                },
+                else => @compileError(@typeName(R)),
+            },
+            else => |v| @compileError(@typeName(R) ++ " , " ++ @tagName(v)),
+        }
     }
 
     pub fn read(r: AnyReader, buffer: []u8) anyerror!usize {
