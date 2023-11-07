@@ -808,3 +808,9 @@ pub const AnyReader = struct {
         }
     }
 };
+
+pub fn sum(comptime T: type, slice: []const T) T {
+    var res: T = 0;
+    for (slice) |item| res += item;
+    return res;
+}
