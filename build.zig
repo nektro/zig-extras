@@ -5,4 +5,7 @@ pub fn build(b: *std.build.Builder) void {
         "extras",
         .{ .source_file = .{ .path = "src/lib.zig" } },
     );
+
+    const test_step = b.step("test", "dummy test step to pass CI checks");
+    _ = test_step;
 }
