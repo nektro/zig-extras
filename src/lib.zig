@@ -1,6 +1,7 @@
 const std = @import("std");
 const string = []const u8;
 const assert = std.debug.assert;
+const builtin = @import("builtin");
 
 pub fn fmtByteCountIEC(alloc: std.mem.Allocator, b: u64) !string {
     return try reduceNumber(alloc, b, 1024, "B", "KMGTPEZYRQ");
@@ -832,4 +833,17 @@ pub fn RingBuffer(comptime T: type, comptime capacity: usize) type {
             self.len += 1;
         }
     };
+}
+
+pub fn fd_realpath(fd: std.os.fd_t) ![std.fs.MAX_PATH_BYTES:0]u8 {
+    switch (builtin.os.tag) {
+        .linux => {
+            var buf = std.mem.zeroes([64]u8);
+            var res = std.mem.zeroes([std.fs.MAX_PATH_BYTES:0]u8);
+            const str = try std.fmt.bufPrint(&buf, "/proc/self/fd/{d}", .{fd});
+            _ = try std.os.readlink(str, &res);
+            return res;
+        },
+        else => @compileError("not implemented!"),
+    }
 }
