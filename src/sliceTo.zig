@@ -8,3 +8,13 @@ pub fn sliceTo(comptime T: type, haystack: []const T, needle: T) []const T {
     }
     return haystack;
 }
+
+test {
+    try std.testing.expect(std.mem.eql(u8, sliceTo(u8, "abcdefgh", 'd'), "abc"));
+}
+test {
+    try std.testing.expect(std.mem.eql(u8, sliceTo(u8, "abcdefgh", 'r'), "abcdefgh"));
+}
+test {
+    try std.testing.expect(std.mem.eql(u8, sliceTo(u8, "abcdefgh", 'a'), ""));
+}
