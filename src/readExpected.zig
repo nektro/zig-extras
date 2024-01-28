@@ -11,3 +11,7 @@ pub fn readExpected(reader: anytype, expected: []const u8) !bool {
     }
     return true;
 }
+
+test {
+    std.testing.refAllDecls(@This());
+}

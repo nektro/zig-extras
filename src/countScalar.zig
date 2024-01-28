@@ -12,3 +12,10 @@ pub fn countScalar(comptime T: type, haystack: []const T, needle: T) usize {
     }
     return found;
 }
+
+test {
+    try std.testing.expect(countScalar(u8, "The lazy brown fox jumped over the lazy dog.", ' ') == 8);
+}
+test {
+    try std.testing.expect(countScalar(u8, "kljsklksldajvaskidjklvadv", 'z') == 0);
+}

@@ -46,3 +46,7 @@ pub fn FixedMaxBuffer(comptime max_len: usize) type {
         }
     };
 }
+
+test {
+    std.testing.refAllDecls(FixedMaxBuffer(16));
+}

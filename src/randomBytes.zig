@@ -7,3 +7,7 @@ pub fn randomBytes(comptime len: usize) [len]u8 {
     std.crypto.random.bytes(&bytes);
     return bytes;
 }
+
+test {
+    std.testing.refAllDecls(@This());
+}

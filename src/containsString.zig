@@ -10,3 +10,10 @@ pub fn containsString(haystack: []const string, needle: string) bool {
     }
     return false;
 }
+
+test {
+    try std.testing.expect(containsString(&.{ "a", "b", "c", "d" }, "b"));
+}
+test {
+    try std.testing.expect(!containsString(&.{}, "b"));
+}

@@ -10,12 +10,14 @@ pub fn fmtReplacer(bytes: string, from: u8, to: u8) std.fmt.Formatter(formatRepl
     } };
 }
 
+const FormatData = struct {
+    bytes: string,
+    from: u8,
+    to: u8,
+};
+
 fn formatReplacer(
-    self: struct {
-        bytes: string,
-        from: u8,
-        to: u8,
-    },
+    self: FormatData,
     comptime fmt: []const u8,
     options: std.fmt.FormatOptions,
     writer: anytype,
@@ -25,4 +27,10 @@ fn formatReplacer(
     for (self.bytes) |c| {
         try writer.writeByte(if (c == self.from) self.to else @intCast(c));
     }
+}
+
+test {
+    const in = "C:\\Program Files\\Custom Utilities\\StringFinder.exe";
+    const out = "C:/Program Files/Custom Utilities/StringFinder.exe";
+    try std.testing.expectFmt(out, "{}", .{fmtReplacer(in, '\\', '/')});
 }

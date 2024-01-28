@@ -8,3 +8,7 @@ pub fn readBytes(reader: anytype, comptime len: usize) ![len]u8 {
     assert(try reader.readAll(&bytes) == len);
     return bytes;
 }
+
+test {
+    std.testing.refAllDecls(@This());
+}
