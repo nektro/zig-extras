@@ -23,7 +23,6 @@ pub usingnamespace @import("./fileSize.zig");
 pub usingnamespace @import("./dirSize.zig");
 pub usingnamespace @import("./hashFile.zig");
 pub usingnamespace @import("./pipe.zig");
-pub usingnamespace @import("./StringerJsonStringifyMixin.zig");
 pub usingnamespace @import("./TagNameJsonStringifyMixin.zig");
 pub usingnamespace @import("./countScalar.zig");
 pub usingnamespace @import("./ptrCast.zig");
