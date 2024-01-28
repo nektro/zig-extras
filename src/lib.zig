@@ -32,7 +32,6 @@ pub usingnamespace @import("./sortBy.zig");
 pub usingnamespace @import("./sortBySlice.zig");
 pub usingnamespace @import("./lessThanSlice.zig");
 pub usingnamespace @import("./containsString.zig");
-pub usingnamespace @import("./positionalInit.zig");
 pub usingnamespace @import("./ensureFieldSubset.zig");
 pub usingnamespace @import("./fmtReplacer.zig");
 pub usingnamespace @import("./randomBytes.zig");
