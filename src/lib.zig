@@ -89,3 +89,5 @@ pub fn fd_realpath(fd: std.os.fd_t) ![std.fs.MAX_PATH_BYTES:0]u8 {
         else => @compileError("not implemented!"),
     }
 }
+
+pub usingnamespace @import("./rawInt.zig");
