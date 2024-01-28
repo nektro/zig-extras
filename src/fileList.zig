@@ -14,3 +14,7 @@ pub fn fileList(alloc: std.mem.Allocator, dir: std.fs.IterableDir) ![]string {
     }
     return list.toOwnedSlice();
 }
+
+test {
+    std.testing.refAllDecls(@This());
+}

@@ -8,3 +8,7 @@ pub fn fileSize(dir: std.fs.Dir, sub_path: string) !u64 {
     const s = try f.stat();
     return s.size;
 }
+
+test {
+    std.testing.refAllDecls(@This());
+}

@@ -11,3 +11,7 @@ pub fn doesFileExist(dir: ?std.fs.Dir, fpath: []const u8) !bool {
     defer file.close();
     return true;
 }
+
+test {
+    std.testing.refAllDecls(@This());
+}

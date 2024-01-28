@@ -9,3 +9,19 @@ pub fn asciiUpper(alloc: std.mem.Allocator, input: string) ![]u8 {
     }
     return buf;
 }
+
+test {
+    const allocator = std.testing.allocator;
+    const input = "hello";
+    const upper = try asciiUpper(allocator, input);
+    defer allocator.free(upper);
+    try std.testing.expect(std.mem.eql(u8, upper, "HELLO"));
+}
+
+test {
+    const allocator = std.testing.allocator;
+    const input = "bUtTer?!";
+    const upper = try asciiUpper(allocator, input);
+    defer allocator.free(upper);
+    try std.testing.expect(std.mem.eql(u8, upper, "BUTTER?!"));
+}

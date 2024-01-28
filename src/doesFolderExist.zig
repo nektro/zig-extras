@@ -15,3 +15,7 @@ pub fn doesFolderExist(dir: ?std.fs.Dir, fpath: []const u8) !bool {
     }
     return true;
 }
+
+test {
+    std.testing.refAllDecls(@This());
+}
