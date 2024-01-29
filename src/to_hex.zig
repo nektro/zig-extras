@@ -1,7 +1,7 @@
 const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
-const rawInt = extras.rawInt;
+const rawIntBytes = extras.rawIntBytes;
 
 pub fn to_hex(array: anytype) [array.len * 2]u8 {
     var res: [array.len * 2]u8 = undefined;
@@ -11,5 +11,5 @@ pub fn to_hex(array: anytype) [array.len * 2]u8 {
 }
 
 test {
-    try std.testing.expect(std.mem.eql(u8, &to_hex(std.mem.toBytes(rawInt(u64, 0x4e5a7da9f3f1d132))), "4e5a7da9f3f1d132"));
+    try std.testing.expect(std.mem.eql(u8, &to_hex(rawIntBytes(u64, 0x4e5a7da9f3f1d132)), "4e5a7da9f3f1d132"));
 }

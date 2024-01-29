@@ -3,7 +3,7 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 const builtin = @import("builtin");
 const native_endian = builtin.target.cpu.arch.endian();
-const rawInt = extras.rawInt;
+const rawIntBytes = extras.rawIntBytes;
 
 pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !T {
     if (T == u8) return reader.readByte(); // single bytes dont have an endianness
@@ -56,7 +56,7 @@ test {
 }
 
 test {
-    const bytes = std.mem.toBytes(rawInt(u32, 0x4e5a7da9));
+    const bytes = rawIntBytes(u32, 0x4e5a7da9);
     var fba = std.io.fixedBufferStream(&bytes);
     const S = struct {
         a: u16,
@@ -70,7 +70,7 @@ test {
 }
 
 test {
-    const bytes = std.mem.toBytes(rawInt(u32, 0x4e5a7da9));
+    const bytes = rawIntBytes(u32, 0x4e5a7da9);
     var fba = std.io.fixedBufferStream(&bytes);
     const A = [2]u16;
     const a = try readType(fba.reader(), A, .Big);
@@ -79,7 +79,7 @@ test {
 }
 
 test {
-    const bytes = std.mem.toBytes(rawInt(u32, 0x4e5a7da9));
+    const bytes = rawIntBytes(u32, 0x4e5a7da9);
     var fba = std.io.fixedBufferStream(&bytes);
     const S = packed struct {
         a: u16,

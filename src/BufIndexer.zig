@@ -2,7 +2,7 @@ const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
 const indexBufferT = extras.indexBufferT;
-const rawInt = extras.rawInt;
+const rawIntBytes = extras.rawIntBytes;
 
 pub fn BufIndexer(comptime T: type, comptime endian: std.builtin.Endian) type {
     return struct {
@@ -26,20 +26,20 @@ pub fn BufIndexer(comptime T: type, comptime endian: std.builtin.Endian) type {
 }
 
 test {
-    const bytes = std.mem.toBytes(rawInt(u64, 0x4e5a7da9f3f1d132));
+    const bytes = rawIntBytes(u64, 0x4e5a7da9f3f1d132);
     const bindex = BufIndexer(u64, .Big).init(&bytes, 1);
     try std.testing.expect(bindex.at(0) == 0x4e5a7da9f3f1d132);
 }
 
 test {
-    const bytes = std.mem.toBytes(rawInt(u64, 0x4e5a7da9f3f1d132));
+    const bytes = rawIntBytes(u64, 0x4e5a7da9f3f1d132);
     const bindex = BufIndexer(u32, .Big).init(&bytes, 2);
     try std.testing.expect(bindex.at(0) == 0x4e5a7da9);
     try std.testing.expect(bindex.at(1) == 0xf3f1d132);
 }
 
 test {
-    const bytes = std.mem.toBytes(rawInt(u64, 0x4e5a7da9f3f1d132));
+    const bytes = rawIntBytes(u64, 0x4e5a7da9f3f1d132);
     const bindex = BufIndexer(u16, .Big).init(&bytes, 4);
     try std.testing.expect(bindex.at(0) == 0x4e5a);
     try std.testing.expect(bindex.at(1) == 0x7da9);
@@ -48,7 +48,7 @@ test {
 }
 
 test {
-    const bytes = std.mem.toBytes(rawInt(u64, 0x4e5a7da9f3f1d132));
+    const bytes = rawIntBytes(u64, 0x4e5a7da9f3f1d132);
     const bindex = BufIndexer(u8, .Big).init(&bytes, 8);
     try std.testing.expect(bindex.at(0) == 0x4e);
     try std.testing.expect(bindex.at(1) == 0x5a);

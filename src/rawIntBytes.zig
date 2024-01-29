@@ -3,7 +3,7 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 const rawInt = extras.rawInt;
 
-pub fn rawIntBytes(comptime T: type, comptime literal: comptime_int) [@bitSizeOf(T) / 8]u8 {
+pub inline fn rawIntBytes(comptime T: type, comptime literal: comptime_int) [@bitSizeOf(T) / 8]u8 {
     return comptime std.mem.toBytes(rawInt(T, literal))[0 .. @bitSizeOf(T) / 8].*;
 }
 
