@@ -13,5 +13,19 @@ pub fn readExpected(reader: anytype, expected: []const u8) !bool {
 }
 
 test {
-    std.testing.refAllDecls(@This());
+    const array = [_]u8{ 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+    var fba = std.io.fixedBufferStream(&array);
+    try std.testing.expect(try readExpected(fba.reader(), &.{ 9, 8, 7, 6 }));
+}
+
+test {
+    const array = [_]u8{ 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+    var fba = std.io.fixedBufferStream(&array);
+    try std.testing.expect(!try readExpected(fba.reader(), &.{ 1, 2, 3 }));
+}
+
+test {
+    const array = [_]u8{ 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+    var fba = std.io.fixedBufferStream(&array);
+    try std.testing.expect(try readExpected(fba.reader(), &.{}));
 }

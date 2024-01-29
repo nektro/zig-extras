@@ -74,3 +74,17 @@ test {
         struct { a: u32, b: u8, c: u16 },
     );
 }
+
+test {
+    try expectSimilarType(
+        union(enum) { a: u32, b: u8, c: u16 },
+        union(enum) { a: u32, b: u8, c: u16 },
+    );
+}
+
+test {
+    try expectSimilarType(
+        enum { a, b, c, d },
+        enum { a, b, c, d },
+    );
+}

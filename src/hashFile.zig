@@ -2,7 +2,6 @@ const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
 const pipe = extras.pipe;
-const rawInt = extras.rawInt;
 
 pub fn hashFile(dir: std.fs.Dir, sub_path: string, comptime Algo: type) ![Algo.digest_length * 2]u8 {
     const file = try dir.openFile(sub_path, .{});
