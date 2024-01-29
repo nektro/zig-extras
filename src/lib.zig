@@ -6,7 +6,6 @@ const builtin = @import("builtin");
 
 pub usingnamespace @import("./reduceNumber.zig");
 pub usingnamespace @import("./fmtByteCountIEC.zig");
-pub usingnamespace @import("./addSentinel.zig");
 pub usingnamespace @import("./randomSlice.zig");
 pub usingnamespace @import("./trimPrefix.zig");
 pub usingnamespace @import("./trimPrefixEnsure.zig");
