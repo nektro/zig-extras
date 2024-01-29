@@ -8,3 +8,10 @@ pub fn trimPrefix(in: string, prefix: string) string {
     }
     return in;
 }
+
+test {
+    try std.testing.expect(std.mem.eql(u8, trimPrefix("abaabbaaba", "c"), "abaabbaaba"));
+}
+test {
+    try std.testing.expect(std.mem.eql(u8, trimPrefix("abaabbaaba", "aba"), "abbaaba"));
+}

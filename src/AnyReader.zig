@@ -121,3 +121,7 @@ pub const AnyReader = struct {
         }
     }
 };
+
+test {
+    std.testing.refAllDecls(AnyReader);
+}

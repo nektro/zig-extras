@@ -1,7 +1,10 @@
 const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
+const expectSimilarType = extras.expectSimilarType;
 
+/// Creates a new version of struct T where all fields are optional.
+/// Name inspried by https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype.
 pub fn Partial(comptime T: type) type {
     const fields_before = std.meta.fields(T);
     var fields_after: [fields_before.len]std.builtin.Type.StructField = undefined;
@@ -21,4 +24,19 @@ pub fn Partial(comptime T: type) type {
         .decls = &.{},
         .is_tuple = false,
     }));
+}
+
+test {
+    try expectSimilarType(
+        Partial(struct {
+            a: u32,
+            b: u8,
+            c: u16,
+        }),
+        struct {
+            a: ?u32,
+            b: ?u8,
+            c: ?u16,
+        },
+    );
 }

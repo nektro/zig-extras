@@ -12,3 +12,11 @@ pub fn randomSlice(alloc: std.mem.Allocator, rand: std.rand.Random, comptime T: 
     }
     return buf;
 }
+
+test {
+    const allocator = std.testing.allocator;
+    const rand = std.crypto.random;
+    const slice = try randomSlice(allocator, rand, u8, 10);
+    defer allocator.free(slice);
+    try std.testing.expect(slice.len == 10);
+}

@@ -8,3 +8,7 @@ pub fn base64DecodeAlloc(alloc: std.mem.Allocator, input: string) !string {
     try base64.decode(buf, input);
     return buf;
 }
+
+test {
+    std.testing.refAllDecls(@This());
+}

@@ -20,3 +20,7 @@ pub fn RingBuffer(comptime T: type, comptime capacity: usize) type {
         }
     };
 }
+
+test {
+    std.testing.refAllDecls(RingBuffer(u8, 16));
+}

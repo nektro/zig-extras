@@ -8,3 +8,10 @@ pub fn trimSuffix(in: string, suffix: string) string {
     }
     return in;
 }
+
+test {
+    try std.testing.expect(std.mem.eql(u8, trimSuffix("abaabbaaba", "c"), "abaabbaaba"));
+}
+test {
+    try std.testing.expect(std.mem.eql(u8, trimSuffix("abaabbaaba", "aba"), "abaabba"));
+}

@@ -12,3 +12,15 @@ pub fn ReverseFields(comptime T: type) type {
     info.fields = &fields;
     return @Type(.{ .Struct = info });
 }
+
+test {
+    const A = struct { x: u8, y: u16 };
+    const B = ReverseFields(A);
+    const fields = std.meta.fields(B);
+
+    try std.testing.expect(fields.len == 2);
+    try std.testing.expect(fields[0].type == u16);
+    try std.testing.expect(std.mem.eql(u8, fields[0].name, "y"));
+    try std.testing.expect(fields[1].type == u8);
+    try std.testing.expect(std.mem.eql(u8, fields[1].name, "x"));
+}
