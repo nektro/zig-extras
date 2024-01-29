@@ -40,3 +40,14 @@ test {
         },
     );
 }
+
+test {
+    try expectSimilarType(
+        Partial(struct {
+            a: ?u8,
+        }),
+        struct {
+            a: ??u8,
+        },
+    );
+}

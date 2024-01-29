@@ -13,3 +13,17 @@ pub fn isArrayOf(comptime T: type) std.meta.trait.TraitFn {
     };
     return Closure.trait;
 }
+
+const L = isArrayOf(u8);
+test {
+    try std.testing.expect(L([5]u8));
+}
+test {
+    try std.testing.expect(!L([3]u32));
+}
+test {
+    try std.testing.expect(!L(struct { a: u8 }));
+}
+test {
+    try std.testing.expect(!L(enum { a, b, c }));
+}

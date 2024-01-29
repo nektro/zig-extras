@@ -1,6 +1,7 @@
 const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
+const expectSimilarType = extras.expectSimilarType;
 
 pub fn FieldUnion(comptime T: type) type {
     const infos = std.meta.fields(T);
@@ -19,4 +20,19 @@ pub fn FieldUnion(comptime T: type) type {
         .fields = &fields,
         .decls = &.{},
     } });
+}
+
+test {
+    try expectSimilarType(
+        FieldUnion(struct {
+            a: u32,
+            b: u8,
+            c: u16,
+        }),
+        union(enum) {
+            a: u32,
+            b: u8,
+            c: u16,
+        },
+    );
 }

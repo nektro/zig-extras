@@ -1,6 +1,7 @@
 const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
+const expectSimilarType = extras.expectSimilarType;
 
 pub fn ReverseFields(comptime T: type) type {
     var info = @typeInfo(T).Struct;
@@ -14,13 +15,14 @@ pub fn ReverseFields(comptime T: type) type {
 }
 
 test {
-    const A = struct { x: u8, y: u16 };
-    const B = ReverseFields(A);
-    const fields = std.meta.fields(B);
-
-    try std.testing.expect(fields.len == 2);
-    try std.testing.expect(fields[0].type == u16);
-    try std.testing.expect(std.mem.eql(u8, fields[0].name, "y"));
-    try std.testing.expect(fields[1].type == u8);
-    try std.testing.expect(std.mem.eql(u8, fields[1].name, "x"));
+    try expectSimilarType(
+        ReverseFields(struct {
+            x: u8,
+            y: u16,
+        }),
+        struct {
+            y: u16,
+            x: u8,
+        },
+    );
 }
