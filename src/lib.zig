@@ -89,3 +89,4 @@ pub fn fd_realpath(fd: std.os.fd_t) ![std.fs.MAX_PATH_BYTES:0]u8 {
 
 pub usingnamespace @import("./rawInt.zig");
 pub usingnamespace @import("./expectSimilarType.zig");
+pub usingnamespace @import("./rawIntBytes.zig");
