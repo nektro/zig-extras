@@ -66,6 +66,7 @@ pub usingnamespace @import("./LoggingReader.zig");
 pub usingnamespace @import("./LoggingWriter.zig");
 pub usingnamespace @import("./Partial.zig");
 pub usingnamespace @import("./coalescePartial.zig");
+pub usingnamespace @import("./joinPartial.zig");
 pub usingnamespace @import("./OneBiggerInt.zig");
 pub usingnamespace @import("./ReverseFields.zig");
 pub usingnamespace @import("./stringToEnum.zig");
