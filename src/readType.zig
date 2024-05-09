@@ -10,14 +10,14 @@ pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !
     return switch (@typeInfo(T)) {
         .Struct => |t| {
             switch (t.layout) {
-                .Auto, .Extern => {
+                .auto, .@"extern" => {
                     var s: T = undefined;
                     inline for (std.meta.fields(T)) |field| {
                         @field(s, field.name) = try readType(reader, field.type, endian);
                     }
                     return s;
                 },
-                .Packed => return @bitCast(try readType(reader, t.backing_integer.?, endian)),
+                .@"packed" => return @bitCast(try readType(reader, t.backing_integer.?, endian)),
             }
         },
         .Array => |t| {
@@ -63,7 +63,7 @@ test {
         b: u8,
         c: u8,
     };
-    const s = try readType(fba.reader(), S, .Big);
+    const s = try readType(fba.reader(), S, .big);
     try std.testing.expect(s.a == 0x4e5a);
     try std.testing.expect(s.b == 0x7d);
     try std.testing.expect(s.c == 0xa9);
@@ -73,7 +73,7 @@ test {
     const bytes = rawIntBytes(u32, 0x4e5a7da9);
     var fba = std.io.fixedBufferStream(&bytes);
     const A = [2]u16;
-    const a = try readType(fba.reader(), A, .Big);
+    const a = try readType(fba.reader(), A, .big);
     try std.testing.expect(a[0] == 0x4e5a);
     try std.testing.expect(a[1] == 0x7da9);
 }
@@ -87,7 +87,7 @@ test {
         c: u4,
         d: u8,
     };
-    const s = try readType(fba.reader(), S, .Big);
+    const s = try readType(fba.reader(), S, .big);
     try std.testing.expect(s.a == 0x7da9);
     try std.testing.expect(s.b == 0xa);
     try std.testing.expect(s.c == 0x5);

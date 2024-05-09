@@ -7,8 +7,8 @@ const native_endian = builtin.target.cpu.arch.endian();
 pub fn rawInt(comptime T: type, comptime literal: comptime_int) T {
     comptime std.debug.assert(@typeInfo(T).Int.bits % 8 == 0);
     return switch (native_endian) {
-        .Little => @byteSwap(@as(T, literal)),
-        .Big => @compileError("unreachable"),
+        .little => @byteSwap(@as(T, literal)),
+        .big => @compileError("unreachable"),
     };
 }
 

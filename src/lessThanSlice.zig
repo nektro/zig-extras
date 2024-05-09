@@ -3,7 +3,6 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 
 pub fn lessThanSlice(comptime T: type) fn (void, T, T) bool {
-    comptime std.debug.assert(std.meta.trait.isSlice(T));
     return struct {
         fn f(_: void, lhs: T, rhs: T) bool {
             const result = for (0..@min(lhs.len, rhs.len)) |i| {

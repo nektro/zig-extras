@@ -18,7 +18,7 @@ pub fn Partial(comptime T: type) type {
         };
     }
     return @Type(@unionInit(std.builtin.Type, "Struct", .{
-        .layout = .Auto,
+        .layout = .auto,
         .backing_integer = null,
         .fields = &fields_after,
         .decls = &.{},

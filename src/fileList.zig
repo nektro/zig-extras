@@ -2,7 +2,7 @@ const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
 
-pub fn fileList(alloc: std.mem.Allocator, dir: std.fs.IterableDir) ![]string {
+pub fn fileList(alloc: std.mem.Allocator, dir: std.fs.Dir) ![]string {
     var list = std.ArrayList(string).init(alloc);
     defer list.deinit();
 

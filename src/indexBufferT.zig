@@ -14,11 +14,11 @@ pub fn indexBufferT(bytes: [*]const u8, comptime T: type, endian: std.builtin.En
 
 test {
     const bytes = rawIntBytes(u32, 0x4e5a7da9);
-    try std.testing.expect(indexBufferT(&bytes, u16, .Big, 0, 2) == 0x4e5a);
-    try std.testing.expect(indexBufferT(&bytes, u16, .Big, 1, 2) == 0x7da9);
+    try std.testing.expect(indexBufferT(&bytes, u16, .big, 0, 2) == 0x4e5a);
+    try std.testing.expect(indexBufferT(&bytes, u16, .big, 1, 2) == 0x7da9);
 }
 test {
     const bytes = rawIntBytes(u32, 0x4e5a7da9);
-    try std.testing.expect(indexBufferT(&bytes, u16, .Little, 0, 2) == 0x5a4e);
-    try std.testing.expect(indexBufferT(&bytes, u16, .Little, 1, 2) == 0xa97d);
+    try std.testing.expect(indexBufferT(&bytes, u16, .little, 0, 2) == 0x5a4e);
+    try std.testing.expect(indexBufferT(&bytes, u16, .little, 1, 2) == 0xa97d);
 }
