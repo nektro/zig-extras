@@ -18,7 +18,7 @@ pub fn hashFile(dir: std.fs.Dir, sub_path: string, comptime Algo: type) ![Algo.d
 
 test {
     const tdir = std.testing.tmpDir(.{}).dir;
-    try tdir.writeFile("yo.txt", "hello");
+    try tdir.writeFile(.{ .sub_path = "yo.txt", .data = "hello" });
     const A = std.crypto.hash.sha2.Sha256;
     const expected = "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824".*;
     try std.testing.expect(std.mem.eql(u8, &try hashFile(tdir, "yo.txt", A), &expected));
