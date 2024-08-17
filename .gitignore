@@ -1,4 +1,5 @@
 zig-*
+.zig-*
 .zigmod
 deps.zig
 zigmod.lock
