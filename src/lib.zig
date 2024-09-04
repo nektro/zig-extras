@@ -93,3 +93,4 @@ pub usingnamespace @import("./rawInt.zig");
 pub usingnamespace @import("./expectSimilarType.zig");
 pub usingnamespace @import("./rawIntBytes.zig");
 pub usingnamespace @import("./globalOption.zig");
+pub usingnamespace @import("./OneSmallerInt.zig");
