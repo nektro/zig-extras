@@ -27,17 +27,17 @@ test {
     try std.testing.expect(FlippedInt(u5) == i5);
 }
 test {
-    try std.testing.expect(FlippedInt(i1) == u0);
+    try std.testing.expect(FlippedInt(i1) == u1);
 }
 test {
-    try std.testing.expect(FlippedInt(i2) == u1);
+    try std.testing.expect(FlippedInt(i2) == u2);
 }
 test {
-    try std.testing.expect(FlippedInt(i3) == u2);
+    try std.testing.expect(FlippedInt(i3) == u3);
 }
 test {
-    try std.testing.expect(FlippedInt(i4) == u3);
+    try std.testing.expect(FlippedInt(i4) == u4);
 }
 test {
-    try std.testing.expect(FlippedInt(i5) == u4);
+    try std.testing.expect(FlippedInt(i5) == u5);
 }
