@@ -95,3 +95,4 @@ pub usingnamespace @import("./rawIntBytes.zig");
 pub usingnamespace @import("./globalOption.zig");
 pub usingnamespace @import("./OneSmallerInt.zig");
 pub usingnamespace @import("./FlippedInt.zig");
+pub usingnamespace @import("./isZigString.zig");
