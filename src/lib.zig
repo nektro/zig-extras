@@ -96,3 +96,4 @@ pub usingnamespace @import("./globalOption.zig");
 pub usingnamespace @import("./OneSmallerInt.zig");
 pub usingnamespace @import("./FlippedInt.zig");
 pub usingnamespace @import("./isZigString.zig");
+pub usingnamespace @import("./isIndexable.zig");
