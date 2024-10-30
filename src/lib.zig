@@ -98,3 +98,4 @@ pub usingnamespace @import("./FlippedInt.zig");
 pub usingnamespace @import("./isZigString.zig");
 pub usingnamespace @import("./isIndexable.zig");
 pub usingnamespace @import("./isSlice.zig");
+pub usingnamespace @import("./matchesNone.zig");
