@@ -16,6 +16,7 @@ pub fn build(b: *std.Build) void {
     });
 
     const run_exe_unit_tests = b.addRunArtifact(exe_unit_tests);
+    run_exe_unit_tests.has_side_effects = true;
 
     const test_step = b.step("test", "dummy test step to pass CI checks");
     test_step.dependOn(&run_exe_unit_tests.step);
