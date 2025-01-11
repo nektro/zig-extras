@@ -4,7 +4,8 @@ const extras = @import("./lib.zig");
 
 pub fn isSlice(comptime T: type) bool {
     if (comptime is(.Pointer)(T)) {
-        return @typeInfo(T).Pointer.size == .Slice;
+        if (@typeInfo(T).Pointer.size == .Slice) return true;
+        if (@typeInfo(T).Pointer.size == .One and is(.Array)(std.meta.Child(T))) return true;
     }
     return false;
 }
@@ -24,4 +25,8 @@ test {
     try std.testing.expect(isSlice(@TypeOf(array[runtime_zero..])));
     try std.testing.expect(!isSlice(@TypeOf(array)));
     try std.testing.expect(!isSlice(@TypeOf(&array[0])));
+}
+
+test {
+    try std.testing.expect(isSlice(@TypeOf(&[_]u32{ 66, 81, 99, 24, 36, 65, 24, 19, 25, 44 })));
 }
