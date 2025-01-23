@@ -4,3 +4,4 @@ zig-out
 deps.zig
 files.zig
 zigmod.lock
+.zig-cache/
