@@ -101,3 +101,4 @@ pub usingnamespace @import("./isSlice.zig");
 pub usingnamespace @import("./matchesNone.zig");
 pub usingnamespace @import("./indexOfSlice.zig");
 pub usingnamespace @import("./mapBy.zig");
+pub usingnamespace @import("./lessThanBy.zig");
