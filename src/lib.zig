@@ -102,3 +102,4 @@ pub usingnamespace @import("./matchesNone.zig");
 pub usingnamespace @import("./indexOfSlice.zig");
 pub usingnamespace @import("./mapBy.zig");
 pub usingnamespace @import("./lessThanBy.zig");
+pub usingnamespace @import("./isContainer.zig");
