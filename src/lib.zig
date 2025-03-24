@@ -104,3 +104,4 @@ pub usingnamespace @import("./mapBy.zig");
 pub usingnamespace @import("./lessThanBy.zig");
 pub usingnamespace @import("./isContainer.zig");
 pub usingnamespace @import("./hasFn.zig");
+pub usingnamespace @import("./hasFields.zig");
