@@ -17,7 +17,7 @@ pub fn expectSimilarType(comptime A: type, comptime B: type) !void {
 
         inline for (info_a_s.fields, info_b_s.fields) |fa, fb| {
             try std.testing.expect(std.mem.eql(u8, fa.name, fb.name));
-            try std.testing.expect(fa.type == fb.type);
+            try expectSimilarType(fa.type, fb.type);
             try std.testing.expect(fa.alignment == fb.alignment);
             try std.testing.expect(fa.is_comptime == fb.is_comptime);
         }
@@ -33,7 +33,7 @@ pub fn expectSimilarType(comptime A: type, comptime B: type) !void {
 
         inline for (info_a_u.fields, info_b_u.fields) |fa, fb| {
             try std.testing.expect(std.mem.eql(u8, fa.name, fb.name));
-            try std.testing.expect(fa.type == fb.type);
+            try expectSimilarType(fa.type, fb.type);
             try std.testing.expect(fa.alignment == fb.alignment);
         }
 
@@ -53,7 +53,7 @@ pub fn expectSimilarType(comptime A: type, comptime B: type) !void {
 
         return;
     }
-    @compileError("not implemented");
+    try std.testing.expect(A == B);
 }
 
 test {
