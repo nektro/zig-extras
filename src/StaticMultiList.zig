@@ -5,7 +5,7 @@ const StructOfSlices = extras.StructOfSlices;
 const StructOfArrays = extras.StructOfArrays;
 const expectSimilarType = extras.expectSimilarType;
 
-pub fn MultiArray(T: type) type {
+pub fn StaticMultiList(T: type) type {
     return struct {
         items: StructOfSlices(T),
 
@@ -30,7 +30,7 @@ pub fn MultiArray(T: type) type {
 
 test {
     try expectSimilarType(
-        MultiArray(struct {
+        StaticMultiList(struct {
             x: u8,
             y: u16,
         }),
