@@ -107,3 +107,4 @@ pub usingnamespace @import("./hasFn.zig");
 pub usingnamespace @import("./hasFields.zig");
 pub usingnamespace @import("./StructOfSlices.zig");
 pub usingnamespace @import("./StructOfArrays.zig");
+pub usingnamespace @import("./MultiArray.zig");
