@@ -3,8 +3,8 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 
 pub fn sliceToInt(comptime T: type, comptime E: type, slice: []const E) !T {
-    const a = @typeInfo(T).Int.bits;
-    const b = @typeInfo(E).Int.bits;
+    const a = @typeInfo(T).int.bits;
+    const b = @typeInfo(E).int.bits;
     if (a < b * slice.len) return error.Overflow;
 
     var n: T = 0;

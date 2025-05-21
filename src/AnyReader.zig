@@ -12,7 +12,7 @@ pub const AnyReader = struct {
         const ctx = reader.context;
         const Ctx = @TypeOf(ctx);
         switch (@typeInfo(Ctx)) {
-            .Pointer => {
+            .pointer => {
                 const S = struct {
                     fn foo(s: *anyopaque, buffer: []u8) anyerror!usize {
                         const r = R{ .context = @ptrCast(@alignCast(s)) };
@@ -24,7 +24,7 @@ pub const AnyReader = struct {
                     .state = ctx,
                 };
             },
-            .Struct => switch (R) {
+            .@"struct" => switch (R) {
                 std.fs.File.Reader => {
                     const S = struct {
                         fn foo(s: *anyopaque, buffer: []u8) anyerror!usize {

@@ -8,7 +8,7 @@ const rawIntBytes = extras.rawIntBytes;
 pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !T {
     if (T == u8) return reader.readByte(); // single bytes dont have an endianness
     return switch (@typeInfo(T)) {
-        .Struct => |t| {
+        .@"struct" => |t| {
             switch (t.layout) {
                 .auto, .@"extern" => {
                     var s: T = undefined;
@@ -20,15 +20,15 @@ pub fn readType(reader: anytype, comptime T: type, endian: std.builtin.Endian) !
                 .@"packed" => return @bitCast(try readType(reader, t.backing_integer.?, endian)),
             }
         },
-        .Array => |t| {
+        .array => |t| {
             var s: T = undefined;
             for (0..t.len) |i| {
                 s[i] = try readType(reader, t.child, endian);
             }
             return s;
         },
-        .Int => try reader.readInt(T, endian),
-        .Enum => |t| @enumFromInt(try readType(reader, t.tag_type, endian)),
+        .int => try reader.readInt(T, endian),
+        .@"enum" => |t| @enumFromInt(try readType(reader, t.tag_type, endian)),
         else => |e| @compileError(@tagName(e)),
     };
 }

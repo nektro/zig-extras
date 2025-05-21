@@ -4,10 +4,10 @@ const extras = @import("./lib.zig");
 
 pub fn isContainer(comptime T: type) bool {
     return switch (@typeInfo(T)) {
-        .Struct,
-        .Union,
-        .Enum,
-        .Opaque,
+        .@"struct",
+        .@"union",
+        .@"enum",
+        .@"opaque",
         => true,
         else => false,
     };

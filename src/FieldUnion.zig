@@ -14,7 +14,7 @@ pub fn FieldUnion(comptime T: type) type {
             .alignment = field.alignment,
         };
     }
-    return @Type(std.builtin.Type{ .Union = .{
+    return @Type(std.builtin.Type{ .@"union" = .{
         .layout = .auto,
         .tag_type = std.meta.FieldEnum(T),
         .fields = &fields,

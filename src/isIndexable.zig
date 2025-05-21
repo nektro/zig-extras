@@ -3,13 +3,13 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 
 pub fn isIndexable(comptime T: type) bool {
-    if (comptime is(.Pointer)(T)) {
-        if (@typeInfo(T).Pointer.size == .One) {
-            return (comptime is(.Array)(std.meta.Child(T)));
+    if (comptime is(.pointer)(T)) {
+        if (@typeInfo(T).pointer.size == .one) {
+            return (comptime is(.array)(std.meta.Child(T)));
         }
         return true;
     }
-    return comptime is(.Array)(T) or is(.Vector)(T) or isTuple(T);
+    return comptime is(.array)(T) or is(.vector)(T) or isTuple(T);
 }
 fn is(comptime id: std.builtin.TypeId) fn (type) bool {
     const Closure = struct {
@@ -20,7 +20,7 @@ fn is(comptime id: std.builtin.TypeId) fn (type) bool {
     return Closure.trait;
 }
 fn isTuple(comptime T: type) bool {
-    return is(.Struct)(T) and @typeInfo(T).Struct.is_tuple;
+    return is(.@"struct")(T) and @typeInfo(T).@"struct".is_tuple;
 }
 
 test {

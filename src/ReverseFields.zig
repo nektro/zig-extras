@@ -4,14 +4,14 @@ const extras = @import("./lib.zig");
 const expectSimilarType = extras.expectSimilarType;
 
 pub fn ReverseFields(comptime T: type) type {
-    var info = @typeInfo(T).Struct;
+    var info = @typeInfo(T).@"struct";
     const len = info.fields.len;
     var fields: [len]std.builtin.Type.StructField = undefined;
     for (0..len) |i| {
         fields[i] = info.fields[len - 1 - i];
     }
     info.fields = &fields;
-    return @Type(.{ .Struct = info });
+    return @Type(.{ .@"struct" = info });
 }
 
 test {

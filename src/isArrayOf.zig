@@ -6,7 +6,7 @@ pub fn isArrayOf(comptime T: type) fn (type) bool {
     const Closure = struct {
         pub fn trait(comptime C: type) bool {
             return switch (@typeInfo(C)) {
-                .Array => |ti| ti.child == T,
+                .array => |ti| ti.child == T,
                 else => false,
             };
         }

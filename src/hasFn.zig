@@ -8,7 +8,7 @@ pub fn hasFn(comptime name: []const u8) fn (type) bool {
             if (!comptime extras.isContainer(T)) return false;
             if (!comptime @hasDecl(T, name)) return false;
             const DeclType = @TypeOf(@field(T, name));
-            return @typeInfo(DeclType) == .Fn;
+            return @typeInfo(DeclType) == .@"fn";
         }
     };
     return Closure.trait;

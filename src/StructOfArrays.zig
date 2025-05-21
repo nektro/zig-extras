@@ -10,13 +10,13 @@ pub fn StructOfArrays(len: usize, T: type) type {
         new_fields[i] = .{
             .name = item.name,
             .type = [len]item.type,
-            .default_value = null,
+            .default_value_ptr = null,
             .is_comptime = false,
             .alignment = @alignOf([len]item.type),
         };
     }
     const result = new_fields[0..fields.len];
-    return @Type(@unionInit(std.builtin.Type, "Struct", .{
+    return @Type(@unionInit(std.builtin.Type, "struct", .{
         .layout = .auto,
         .backing_integer = null,
         .fields = result,

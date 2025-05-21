@@ -3,9 +3,9 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 
 pub fn isSlice(comptime T: type) bool {
-    if (comptime is(.Pointer)(T)) {
-        if (@typeInfo(T).Pointer.size == .Slice) return true;
-        if (@typeInfo(T).Pointer.size == .One and is(.Array)(std.meta.Child(T))) return true;
+    if (comptime is(.pointer)(T)) {
+        if (@typeInfo(T).pointer.size == .slice) return true;
+        if (@typeInfo(T).pointer.size == .one and is(.array)(std.meta.Child(T))) return true;
     }
     return false;
 }

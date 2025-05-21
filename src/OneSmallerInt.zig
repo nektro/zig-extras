@@ -4,7 +4,7 @@ const extras = @import("./lib.zig");
 
 pub fn OneSmallerInt(comptime T: type) type {
     var info = @typeInfo(T);
-    info.Int.bits -= 1;
+    info.int.bits -= 1;
     return @Type(info);
 }
 

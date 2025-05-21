@@ -4,7 +4,7 @@ const extras = @import("./lib.zig");
 
 pub fn FlippedInt(comptime T: type) type {
     var info = @typeInfo(T);
-    info.Int.signedness = switch (info.Int.signedness) {
+    info.int.signedness = switch (info.int.signedness) {
         .signed => .unsigned,
         .unsigned => .signed,
     };

@@ -12,12 +12,12 @@ pub fn Partial(comptime T: type) type {
         fields_after[i] = std.builtin.Type.StructField{
             .name = item.name,
             .type = ?item.type,
-            .default_value = &@as(?item.type, null),
+            .default_value_ptr = &@as(?item.type, null),
             .is_comptime = false,
             .alignment = @alignOf(?item.type),
         };
     }
-    return @Type(@unionInit(std.builtin.Type, "Struct", .{
+    return @Type(@unionInit(std.builtin.Type, "struct", .{
         .layout = .auto,
         .backing_integer = null,
         .fields = &fields_after,
