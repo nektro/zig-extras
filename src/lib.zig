@@ -25,7 +25,6 @@ pub usingnamespace @import("./pipe.zig");
 pub usingnamespace @import("./StringerJsonStringifyMixin.zig");
 pub usingnamespace @import("./TagNameJsonStringifyMixin.zig");
 pub usingnamespace @import("./countScalar.zig");
-pub usingnamespace @import("./ptrCast.zig");
 pub usingnamespace @import("./ptrCastConst.zig");
 pub usingnamespace @import("./sortBy.zig");
 pub usingnamespace @import("./sortBySlice.zig");
