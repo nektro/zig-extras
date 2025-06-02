@@ -3,31 +3,25 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 const reduceNumber = extras.reduceNumber;
 
-pub fn fmtByteCountIEC(alloc: std.mem.Allocator, b: u64) !string {
-    return try reduceNumber(alloc, b, 1024, "B", "KMGTPEZYRQ");
+pub fn fmtByteCountIEC(b: u64) std.fmt.Formatter(formatByteCountIEC) {
+    return .{ .data = b };
+}
+
+fn formatByteCountIEC(bytes: u64, comptime fmt: []const u8, options: std.fmt.FormatOptions, writer: anytype) !void {
+    _ = fmt;
+    _ = options;
+    try reduceNumber(writer, bytes, 1024, "B", "KMGTPEZYRQ");
 }
 
 test {
-    const allocator = std.testing.allocator;
-    const actual = try fmtByteCountIEC(allocator, std.math.pow(u64, 1024, 0));
-    defer allocator.free(actual);
-    try std.testing.expect(std.mem.eql(u8, actual, "1 B"));
+    try std.testing.expectFmt("1 B", "{}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 0))});
 }
 test {
-    const allocator = std.testing.allocator;
-    const actual = try fmtByteCountIEC(allocator, std.math.pow(u64, 1024, 1));
-    defer allocator.free(actual);
-    try std.testing.expect(std.mem.eql(u8, actual, "1.000 KB"));
+    try std.testing.expectFmt("1.000 KB", "{}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 1))});
 }
 test {
-    const allocator = std.testing.allocator;
-    const actual = try fmtByteCountIEC(allocator, std.math.pow(u64, 1024, 2));
-    defer allocator.free(actual);
-    try std.testing.expect(std.mem.eql(u8, actual, "1.000 MB"));
+    try std.testing.expectFmt("1.000 MB", "{}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 2))});
 }
 test {
-    const allocator = std.testing.allocator;
-    const actual = try fmtByteCountIEC(allocator, std.math.pow(u64, 1024, 3));
-    defer allocator.free(actual);
-    try std.testing.expect(std.mem.eql(u8, actual, "1.000 GB"));
+    try std.testing.expectFmt("1.000 GB", "{}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 3))});
 }
