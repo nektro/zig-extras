@@ -106,3 +106,4 @@ pub usingnamespace @import("./hasFields.zig");
 pub usingnamespace @import("./StructOfSlices.zig");
 pub usingnamespace @import("./StructOfArrays.zig");
 pub usingnamespace @import("./StaticMultiList.zig");
+pub usingnamespace @import("./join.zig");
