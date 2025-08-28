@@ -20,6 +20,7 @@ pub fn build(b: *std.Build) void {
 
     const test_step = b.step("test", "Run all library tests");
     const tests_run = b.addRunArtifact(tests);
+    tests_run.setCwd(b.path("."));
     tests_run.has_side_effects = true;
     test_step.dependOn(&tests_run.step);
 }
