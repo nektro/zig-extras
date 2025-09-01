@@ -74,17 +74,21 @@ pub usingnamespace @import("./AnyReader.zig");
 pub usingnamespace @import("./sum.zig");
 pub usingnamespace @import("./RingBuffer.zig");
 
-pub fn fd_realpath(fd: std.posix.fd_t) ![std.fs.MAX_PATH_BYTES:0]u8 {
+pub fn fd_realpath(fd: std.posix.fd_t) ![std.fs.max_path_bytes:0]u8 {
     switch (builtin.os.tag) {
         .linux => {
             var buf = std.mem.zeroes([64]u8);
-            var res = std.mem.zeroes([std.fs.MAX_PATH_BYTES:0]u8);
+            var res = std.mem.zeroes([std.fs.max_path_bytes:0]u8);
             const str = try std.fmt.bufPrint(&buf, "/proc/self/fd/{d}", .{fd});
             _ = try std.posix.readlink(str, &res);
             return res;
         },
         else => @compileError("not implemented!"),
     }
+}
+test {
+    if (builtin.os.tag != .linux) return;
+    _ = &fd_realpath;
 }
 
 pub usingnamespace @import("./rawInt.zig");
