@@ -112,3 +112,4 @@ pub usingnamespace @import("./StructOfArrays.zig");
 pub usingnamespace @import("./StaticMultiList.zig");
 pub usingnamespace @import("./join.zig");
 pub usingnamespace @import("./omit.zig");
+pub usingnamespace @import("./swapMany.zig");
