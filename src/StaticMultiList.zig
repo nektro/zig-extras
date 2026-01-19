@@ -11,6 +11,7 @@ pub fn StaticMultiList(T: type) type {
 
         pub fn initComptime(comptime data: []const T) @This() {
             return comptime blk: {
+                @setEvalBranchQuota(1_000_000_000);
                 var temp: StructOfArrays(data.len, T) = undefined;
                 for (data, 0..) |item, i| {
                     for (std.meta.fieldNames(T)) |name| {
