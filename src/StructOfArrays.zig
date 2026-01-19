@@ -4,7 +4,8 @@ const extras = @import("./lib.zig");
 const expectSimilarType = extras.expectSimilarType;
 
 pub fn StructOfArrays(len: usize, T: type) type {
-    const fields = std.meta.fields(T);
+    const info = @typeInfo(T).@"struct";
+    const fields = info.fields;
     var new_fields: [fields.len]std.builtin.Type.StructField = undefined;
     for (fields, 0..) |item, i| {
         new_fields[i] = .{
@@ -21,7 +22,7 @@ pub fn StructOfArrays(len: usize, T: type) type {
         .backing_integer = null,
         .fields = result,
         .decls = &.{},
-        .is_tuple = false,
+        .is_tuple = info.is_tuple,
     }));
 }
 
