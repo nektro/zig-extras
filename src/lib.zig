@@ -114,3 +114,4 @@ pub usingnamespace @import("./join.zig");
 pub usingnamespace @import("./omit.zig");
 pub usingnamespace @import("./swapMany.zig");
 pub usingnamespace @import("./ManyArrayList.zig");
+pub usingnamespace @import("./compareFnBasic.zig");
