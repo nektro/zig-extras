@@ -32,7 +32,7 @@ pub fn ManyArrayList(T: type) type {
             self.lengths.items[n] += slice.len;
         }
 
-        pub fn items(self: *@This(), n: usize) []T {
+        pub fn items(self: *const @This(), n: usize) []T {
             const real_n = extras.sum(usize, self.lengths.items[0..n]);
             const len = self.lengths.items[n];
             return self.list.items[real_n..][0..len];
