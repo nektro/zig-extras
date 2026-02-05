@@ -117,3 +117,4 @@ pub usingnamespace @import("./ManyArrayList.zig");
 pub usingnamespace @import("./compareFnBasic.zig");
 pub usingnamespace @import("./compareFnField.zig");
 pub usingnamespace @import("./compareFnRange.zig");
+pub usingnamespace @import("./asciiLower.zig");
