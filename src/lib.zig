@@ -120,3 +120,4 @@ pub usingnamespace @import("./compareFnRange.zig");
 pub usingnamespace @import("./asciiLower.zig");
 pub usingnamespace @import("./parseDigits.zig");
 pub usingnamespace @import("./from_hex.zig");
+pub usingnamespace @import("./Pointee.zig");
