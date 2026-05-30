@@ -71,24 +71,6 @@ pub const containsAggregate = @import("./containsAggregate.zig").containsAggrega
 pub const AnyReader = @import("./AnyReader.zig").AnyReader;
 pub const sum = @import("./sum.zig").sum;
 pub const RingBuffer = @import("./RingBuffer.zig").RingBuffer;
-
-pub fn fd_realpath(fd: std.posix.fd_t) ![std.fs.max_path_bytes:0]u8 {
-    switch (builtin.os.tag) {
-        .linux => {
-            var buf = std.mem.zeroes([64]u8);
-            var res = std.mem.zeroes([std.fs.max_path_bytes:0]u8);
-            const str = try std.fmt.bufPrint(&buf, "/proc/self/fd/{d}", .{fd});
-            _ = try std.posix.readlink(str, &res);
-            return res;
-        },
-        else => @compileError("not implemented!"),
-    }
-}
-test {
-    if (builtin.os.tag != .linux) return;
-    _ = &fd_realpath;
-}
-
 pub const rawInt = @import("./rawInt.zig").rawInt;
 pub const expectSimilarType = @import("./expectSimilarType.zig").expectSimilarType;
 pub const rawIntBytes = @import("./rawIntBytes.zig").rawIntBytes;
