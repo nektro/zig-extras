@@ -3,10 +3,12 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 
 pub fn pipe(reader_from: anytype, writer_to: anytype) !void {
-    var buf: [std.heap.page_size_min]u8 = undefined;
-    var fifo = std.fifo.LinearFifo(u8, .Slice).init(&buf);
-    defer fifo.deinit();
-    try fifo.pump(reader_from, writer_to);
+    var buf: [4096]u8 = undefined;
+    while (true) {
+        const n = try reader_from.read(&buf);
+        if (n == 0) break;
+        try writer_to.writeAll(buf[0..n]);
+    }
 }
 
 test {
