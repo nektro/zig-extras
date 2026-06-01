@@ -15,8 +15,8 @@ test {
     const bytes = "abcdefghijklmnopqrstuvwxyz".*;
     var fba = std.io.fixedBufferStream(&bytes);
     const allocator = std.testing.allocator;
-    var list = std.ArrayList(u8).init(allocator);
+    var list = std.Io.Writer.Allocating.init(allocator);
     defer list.deinit();
-    try pipe(fba.reader(), list.writer());
-    try std.testing.expect(std.mem.eql(u8, &bytes, list.items));
+    try pipe(fba.reader(), &list.writer);
+    try std.testing.expect(std.mem.eql(u8, &bytes, list.written()));
 }

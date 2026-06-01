@@ -12,14 +12,14 @@ fn formatByteCountIEC(bytes: u64, writer: *std.Io.Writer) !void {
 }
 
 test {
-    try std.testing.expectFmt("1 B", "{}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 0))});
+    try std.testing.expectFmt("1 B", "{f}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 0))});
 }
 test {
-    try std.testing.expectFmt("1.000 KB", "{}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 1))});
+    try std.testing.expectFmt("1.000 KB", "{f}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 1))});
 }
 test {
-    try std.testing.expectFmt("1.000 MB", "{}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 2))});
+    try std.testing.expectFmt("1.000 MB", "{f}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 2))});
 }
 test {
-    try std.testing.expectFmt("1.000 GB", "{}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 3))});
+    try std.testing.expectFmt("1.000 GB", "{f}", .{fmtByteCountIEC(std.math.pow(u64, 1024, 3))});
 }

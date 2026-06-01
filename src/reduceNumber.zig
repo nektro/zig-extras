@@ -21,29 +21,29 @@ pub fn reduceNumber(writer: anytype, input: u64, comptime unit: u64, comptime ba
 
 test {
     const allocator = std.testing.allocator;
-    var list = std.ArrayList(u8).init(allocator);
+    var list = std.Io.Writer.Allocating.init(allocator);
     defer list.deinit();
-    try reduceNumber(list.writer(), 1, 60, "s", "mh");
-    try std.testing.expect(std.mem.eql(u8, list.items, "1 s"));
+    try reduceNumber(&list.writer, 1, 60, "s", "mh");
+    try std.testing.expect(std.mem.eql(u8, list.written(), "1 s"));
 }
 test {
     const allocator = std.testing.allocator;
-    var list = std.ArrayList(u8).init(allocator);
+    var list = std.Io.Writer.Allocating.init(allocator);
     defer list.deinit();
-    try reduceNumber(list.writer(), 60, 60, "s", "mh");
-    try std.testing.expect(std.mem.eql(u8, list.items, "1.000 ms"));
+    try reduceNumber(&list.writer, 60, 60, "s", "mh");
+    try std.testing.expect(std.mem.eql(u8, list.written(), "1.000 ms"));
 }
 test {
     const allocator = std.testing.allocator;
-    var list = std.ArrayList(u8).init(allocator);
+    var list = std.Io.Writer.Allocating.init(allocator);
     defer list.deinit();
-    try reduceNumber(list.writer(), 3600, 60, "s", "mh");
-    try std.testing.expect(std.mem.eql(u8, list.items, "1.000 hs"));
+    try reduceNumber(&list.writer, 3600, 60, "s", "mh");
+    try std.testing.expect(std.mem.eql(u8, list.written(), "1.000 hs"));
 }
 test {
     const allocator = std.testing.allocator;
-    var list = std.ArrayList(u8).init(allocator);
+    var list = std.Io.Writer.Allocating.init(allocator);
     defer list.deinit();
-    try reduceNumber(list.writer(), 216000, 60, "s", "mh");
-    try std.testing.expect(std.mem.eql(u8, list.items, "60.000 hs"));
+    try reduceNumber(&list.writer, 216000, 60, "s", "mh");
+    try std.testing.expect(std.mem.eql(u8, list.written(), "60.000 hs"));
 }

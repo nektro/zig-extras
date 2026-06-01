@@ -10,7 +10,7 @@ pub fn FixedMaxBuffer(comptime max_len: usize) type {
         pos: usize,
 
         const Self = @This();
-        pub const Reader = std.io.Reader(*Self, error{}, read);
+        pub const Reader = std.io.GenericReader(*Self, error{}, read);
 
         pub fn init(r: anytype, runtime_len: usize) !Self {
             var fmr = Self{

@@ -2,8 +2,8 @@ const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
 
-pub fn mapBy(allocator: std.mem.Allocator, slice: anytype, comptime field: std.meta.FieldEnum(std.meta.Elem(@TypeOf(slice)))) ![]std.meta.FieldType(std.meta.Elem(@TypeOf(slice)), field) {
-    const newslice = try allocator.alloc(std.meta.FieldType(std.meta.Elem(@TypeOf(slice)), field), slice.len);
+pub fn mapBy(allocator: std.mem.Allocator, slice: anytype, comptime field: std.meta.FieldEnum(std.meta.Elem(@TypeOf(slice)))) ![]@FieldType(std.meta.Elem(@TypeOf(slice)), @tagName(field)) {
+    const newslice = try allocator.alloc(@FieldType(std.meta.Elem(@TypeOf(slice)), @tagName(field)), slice.len);
     for (newslice, slice) |*i, j| i.* = @field(j, @tagName(field));
     return newslice;
 }
