@@ -6,7 +6,7 @@ const lessThanSlice = extras.lessThanSlice;
 pub fn sortBySlice(comptime T: type, items: []T, comptime field: std.meta.FieldEnum(T)) void {
     std.mem.sort(T, items, {}, struct {
         fn f(_: void, lhs: T, rhs: T) bool {
-            return lessThanSlice(std.meta.FieldType(T, field))({}, @field(lhs, @tagName(field)), @field(rhs, @tagName(field)));
+            return lessThanSlice(@FieldType(T, @tagName(field)))({}, @field(lhs, @tagName(field)), @field(rhs, @tagName(field)));
         }
     }.f);
 }

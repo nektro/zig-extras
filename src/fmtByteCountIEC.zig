@@ -3,13 +3,11 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 const reduceNumber = extras.reduceNumber;
 
-pub fn fmtByteCountIEC(b: u64) std.fmt.Formatter(formatByteCountIEC) {
+pub fn fmtByteCountIEC(b: u64) std.fmt.Alt(u64, formatByteCountIEC) {
     return .{ .data = b };
 }
 
-fn formatByteCountIEC(bytes: u64, comptime fmt: []const u8, options: std.fmt.FormatOptions, writer: anytype) !void {
-    _ = fmt;
-    _ = options;
+fn formatByteCountIEC(bytes: u64, writer: *std.Io.Writer) !void {
     try reduceNumber(writer, bytes, 1024, "B", "KMGTPEZYRQ");
 }
 
