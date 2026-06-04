@@ -3,9 +3,8 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 
 pub fn OneSmallerInt(comptime T: type) type {
-    var info = @typeInfo(T);
-    info.int.bits -= 1;
-    return @Type(info);
+    const info = @typeInfo(T).int;
+    return @Int(info.signedness, info.bits - 1);
 }
 
 test {

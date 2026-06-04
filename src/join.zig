@@ -14,17 +14,13 @@ pub fn join(input: anytype) Join(@TypeOf(input)) {
 }
 
 pub fn Join(comptime T: type) type {
-    var fields: []const std.builtin.Type.StructField = &.{};
+    var names: [][]const u8 = &.{};
+    var types: []type = &.{};
     inline for (std.meta.fields(T)) |item| {
         inline for (std.meta.fields(item.type)) |f| {
-            fields = fields ++ &[_]std.builtin.Type.StructField{.{
-                .name = f.name,
-                .type = f.type,
-                .default_value_ptr = null,
-                .is_comptime = false,
-                .alignment = @alignOf(f.type),
-            }};
+            names = names ++ &[_][]const u8{f.name};
+            types = types ++ &[_]type{f.type};
         }
     }
-    return @Type(.{ .@"struct" = .{ .layout = .auto, .fields = fields, .decls = &.{}, .is_tuple = false } });
+    return @Struct(.auto, null, &names, &types, &@splat(.{}));
 }

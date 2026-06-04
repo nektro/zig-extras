@@ -2,7 +2,7 @@ const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
 
-pub fn LoggingReader(comptime T: type, comptime scope: @Type(.EnumLiteral)) type {
+pub fn LoggingReader(comptime T: type, comptime scope: @EnumLiteral()) type {
     return struct {
         child_stream: T,
 

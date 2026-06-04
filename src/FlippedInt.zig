@@ -3,12 +3,14 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 
 pub fn FlippedInt(comptime T: type) type {
-    var info = @typeInfo(T);
-    info.int.signedness = switch (info.int.signedness) {
-        .signed => .unsigned,
-        .unsigned => .signed,
-    };
-    return @Type(info);
+    const info = @typeInfo(T).int;
+    return @Int(
+        switch (info.signedness) {
+            .signed => .unsigned,
+            .unsigned => .signed,
+        },
+        info.signedness,
+    );
 }
 
 test {

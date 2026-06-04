@@ -14,12 +14,22 @@ pub fn omit(value: anytype, comptime field_name: []const u8) Omit(@TypeOf(value)
 
 pub fn Omit(T: type, field_name: []const u8) type {
     const fields_original = std.meta.fields(T);
-    var fields: [fields_original.len - 1]std.builtin.Type.StructField = undefined;
+    const len = fields_original.len - 1;
+    var names: [len][]const u8 = undefined;
+    var types: [len]type = undefined;
+    var attrs: [len]std.builtin.Type.StructField.Attributes = undefined;
     var i: usize = 0;
     for (fields_original) |f| {
         if (std.mem.eql(u8, f.name, field_name)) continue;
-        fields[i] = f;
+        names[i] = f.name;
+        types[i] = f.type;
+        attrs[i] = .{
+            .@"comptime" = f.is_comptime,
+            .@"align" = f.alignment,
+            .default_value_ptr = f.default_value_ptr,
+        };
         i += 1;
     }
-    return @Type(.{ .@"struct" = .{ .layout = .auto, .fields = &fields, .decls = &.{}, .is_tuple = false } });
+    return @Struct(.auto, null, &names, &types, &attrs);
+    // return @Type(.{ .@"struct" = .{ .layout = .auto, .fields = &fields, .decls = &.{}, .is_tuple = false } });
 }

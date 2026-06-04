@@ -6,24 +6,13 @@ const expectSimilarType = extras.expectSimilarType;
 pub fn StructOfArrays(len: usize, T: type) type {
     const info = @typeInfo(T).@"struct";
     const fields = info.fields;
-    var new_fields: [fields.len]std.builtin.Type.StructField = undefined;
+    var names: [fields.len][]const u8 = undefined;
+    var types: [fields.len]type = undefined;
     for (fields, 0..) |item, i| {
-        new_fields[i] = .{
-            .name = item.name,
-            .type = [len]item.type,
-            .default_value_ptr = null,
-            .is_comptime = false,
-            .alignment = @alignOf([len]item.type),
-        };
+        names[i] = item.name;
+        types[i] = [len]item.type;
     }
-    const result = new_fields[0..fields.len];
-    return @Type(@unionInit(std.builtin.Type, "struct", .{
-        .layout = .auto,
-        .backing_integer = null,
-        .fields = result,
-        .decls = &.{},
-        .is_tuple = info.is_tuple,
-    }));
+    return @Struct(.auto, null, &names, &types, &@splat(.{}));
 }
 
 test {

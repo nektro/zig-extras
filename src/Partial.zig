@@ -6,24 +6,16 @@ const expectSimilarType = extras.expectSimilarType;
 /// Creates a new version of struct T where all fields are optional.
 /// Name inspried by https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype.
 pub fn Partial(comptime T: type) type {
-    const fields_before = std.meta.fields(T);
-    var fields_after: [fields_before.len]std.builtin.Type.StructField = undefined;
-    inline for (fields_before, 0..) |item, i| {
-        fields_after[i] = std.builtin.Type.StructField{
-            .name = item.name,
-            .type = ?item.type,
-            .default_value_ptr = &@as(?item.type, null),
-            .is_comptime = false,
-            .alignment = @alignOf(?item.type),
-        };
+    const fields = std.meta.fields(T);
+    var names: [fields.len][]const u8 = undefined;
+    var types: [fields.len]type = undefined;
+    var attrs: [fields.len]std.builtin.Type.StructField.Attributes = undefined;
+    for (fields, 0..) |item, i| {
+        names[i] = item.name;
+        types[i] = ?item.type;
+        attrs[i] = .{ .default_value_ptr = &@as(?item.type, null) };
     }
-    return @Type(@unionInit(std.builtin.Type, "struct", .{
-        .layout = .auto,
-        .backing_integer = null,
-        .fields = &fields_after,
-        .decls = &.{},
-        .is_tuple = false,
-    }));
+    return @Struct(.auto, null, &names, &types, &attrs);
 }
 
 test {
