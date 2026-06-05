@@ -19,6 +19,7 @@ pub fn build(b: *std.Build) void {
     tests.root_module.addImport("extras", mod);
     tests.use_llvm = !disable_llvm;
     tests.use_lld = !disable_llvm;
+    b.getInstallStep().dependOn(&tests.step);
 
     const test_step = b.step("test", "Run all library tests");
     const tests_run = b.addRunArtifact(tests);
