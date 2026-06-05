@@ -12,6 +12,7 @@ pub fn StructOfSlices(T: type) type {
         names[i] = item.name;
         types[i] = []const item.type;
     }
+    if (info.is_tuple) return @Tuple(&types);
     return @Struct(.auto, null, &names, &types, &@splat(.{}));
 }
 

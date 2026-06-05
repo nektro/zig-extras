@@ -9,7 +9,7 @@ pub fn FlippedInt(comptime T: type) type {
             .signed => .unsigned,
             .unsigned => .signed,
         },
-        info.signedness,
+        info.bits,
     );
 }
 

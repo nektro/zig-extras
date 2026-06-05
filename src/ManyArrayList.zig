@@ -10,8 +10,8 @@ pub fn ManyArrayList(T: type) type {
         pub fn init(allocator: std.mem.Allocator) @This() {
             return .{
                 .allocator = allocator,
-                .list = .{},
-                .lengths = .{},
+                .list = .empty,
+                .lengths = .empty,
             };
         }
 

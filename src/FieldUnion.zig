@@ -5,9 +5,9 @@ const expectSimilarType = extras.expectSimilarType;
 
 pub fn FieldUnion(comptime T: type) type {
     const fields = std.meta.fields(T);
-    var names: [fields.fields.len][]const u8 = undefined;
-    var types: [fields.fields.len]type = undefined;
-    var attrs: [fields.fields.len]std.builtin.Type.UnionField.Attributes = undefined;
+    var names: [fields.len][]const u8 = undefined;
+    var types: [fields.len]type = undefined;
+    var attrs: [fields.len]std.builtin.Type.UnionField.Attributes = undefined;
 
     inline for (fields, 0..) |field, i| {
         names[i] = field.name;

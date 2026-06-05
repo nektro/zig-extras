@@ -31,5 +31,4 @@ pub fn Omit(T: type, field_name: []const u8) type {
         i += 1;
     }
     return @Struct(.auto, null, &names, &types, &attrs);
-    // return @Type(.{ .@"struct" = .{ .layout = .auto, .fields = &fields, .decls = &.{}, .is_tuple = false } });
 }

@@ -14,13 +14,13 @@ pub fn join(input: anytype) Join(@TypeOf(input)) {
 }
 
 pub fn Join(comptime T: type) type {
-    var names: [][]const u8 = &.{};
-    var types: []type = &.{};
+    var names: []const []const u8 = &.{};
+    var types: []const type = &.{};
     inline for (std.meta.fields(T)) |item| {
         inline for (std.meta.fields(item.type)) |f| {
             names = names ++ &[_][]const u8{f.name};
             types = types ++ &[_]type{f.type};
         }
     }
-    return @Struct(.auto, null, &names, &types, &@splat(.{}));
+    return @Struct(.auto, null, names, types[0..], &@splat(.{}));
 }

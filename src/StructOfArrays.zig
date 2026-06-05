@@ -12,6 +12,7 @@ pub fn StructOfArrays(len: usize, T: type) type {
         names[i] = item.name;
         types[i] = [len]item.type;
     }
+    if (info.is_tuple) return @Tuple(&types);
     return @Struct(.auto, null, &names, &types, &@splat(.{}));
 }
 
