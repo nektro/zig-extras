@@ -12,7 +12,7 @@ pub fn ReverseFields(comptime T: type) type {
         names[i] = info.fields[len - 1 - i].name;
         types[i] = info.fields[len - 1 - i].type;
     }
-    return @Struct(.auto, null, &names, &types, &@splat(.{}));
+    return @Struct(info.layout, null, &names, &types, &@splat(.{}));
 }
 
 test {
