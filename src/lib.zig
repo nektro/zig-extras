@@ -40,6 +40,7 @@ pub const isArrayOf = @import("./isArrayOf.zig").isArrayOf;
 pub const parse_int = @import("./parse_int.zig").parse_int;
 pub const parse_bool = @import("./parse_bool.zig").parse_bool;
 pub const to_hex = @import("./to_hex.zig").to_hex;
+pub const to_HEX = @import("./to_hex.zig").to_HEX;
 pub const FieldUnion = @import("./FieldUnion.zig").FieldUnion;
 pub const LoggingReader = @import("./LoggingReader.zig").LoggingReader;
 pub const LoggingWriter = @import("./LoggingWriter.zig").LoggingWriter;

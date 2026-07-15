@@ -22,6 +22,16 @@ pub fn to_hex(array: anytype) [array.len * 2]u8 {
     return res;
 }
 
+pub fn to_HEX(array: anytype) [array.len * 2]u8 {
+    var res: [array.len * 2]u8 = undefined;
+    for (&array, 0..) |x, i| res[i * 2 ..][0..2].* = alphabet[@as(usize, x) * 2 ..][0..2].*;
+    for (&res) |*x| x.* = std.ascii.toUpper(x.*);
+    return res;
+}
+
 test {
     try std.testing.expect(std.mem.eql(u8, &to_hex(rawIntBytes(u64, 0x4e5a7da9f3f1d132)), "4e5a7da9f3f1d132"));
+}
+test {
+    try std.testing.expect(std.mem.eql(u8, &to_hex(rawIntBytes(u64, 0x4e5a7da9f3f1d132)), "4E5A7dA9F3F1D132"));
 }
