@@ -87,6 +87,7 @@ pub const from_hex = @import("./from_hex.zig").from_hex;
 pub const Pointee = @import("./Pointee.zig").Pointee;
 pub const compareFnSlice = @import("./compareFnSlice.zig").compareFnSlice;
 pub const sumLen = @import("./sumLen.zig").sumLen;
+pub const splitScalarN = @import("./splitScalarN.zig").splitScalarN;
 
 test {
     _ = @import("reduceNumber.zig");
@@ -163,4 +164,5 @@ test {
     _ = @import("Pointee.zig");
     _ = @import("compareFnSlice.zig");
     _ = @import("sumLen.zig");
+    _ = @import("splitScalarN.zig");
 }
