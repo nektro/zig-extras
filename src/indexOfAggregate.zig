@@ -1,10 +1,14 @@
 const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
-const indexOfAggregate = extras.indexOfAggregate;
 
-pub fn containsAggregate(comptime T: type, haystack: []const T, needle: T) bool {
-    return indexOfAggregate(T, haystack, needle) != null;
+pub fn indexOfAggregate(comptime T: type, haystack: []const T, needle: T) ?usize {
+    for (haystack, 0..) |item, i| {
+        if (T.eql(item, needle)) {
+            return i;
+        }
+    }
+    return null;
 }
 
 test {
@@ -26,6 +30,6 @@ test {
         .{ .a = 3 },
         .{ .a = 5 },
     };
-    try std.testing.expect(containsAggregate(S, &data, .{ .a = 4 }));
-    try std.testing.expect(!containsAggregate(S, &data, .{ .a = 0 }));
+    try std.testing.expect(indexOfAggregate(S, &data, .{ .a = 4 }) == 4);
+    try std.testing.expect(indexOfAggregate(S, &data, .{ .a = 0 }) == null);
 }
