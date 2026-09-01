@@ -89,6 +89,7 @@ pub const compareFnSlice = @import("./compareFnSlice.zig").compareFnSlice;
 pub const sumLen = @import("./sumLen.zig").sumLen;
 pub const splitScalarN = @import("./splitScalarN.zig").splitScalarN;
 pub const indexOfAggregate = @import("./indexOfAggregate.zig").indexOfAggregate;
+pub const isTuple = @import("./isTuple.zig").isTuple;
 
 test {
     _ = @import("reduceNumber.zig");
@@ -167,4 +168,5 @@ test {
     _ = @import("sumLen.zig");
     _ = @import("splitScalarN.zig");
     _ = @import("indexOfAggregate.zig");
+    _ = @import("isTuple.zig");
 }

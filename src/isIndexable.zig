@@ -1,6 +1,7 @@
 const std = @import("std");
 const string = []const u8;
 const extras = @import("./lib.zig");
+const isTuple = extras.isTuple;
 
 pub fn isIndexable(comptime T: type) bool {
     if (comptime is(.pointer)(T)) {
@@ -18,9 +19,6 @@ fn is(comptime id: std.builtin.TypeId) fn (type) bool {
         }
     };
     return Closure.trait;
-}
-fn isTuple(comptime T: type) bool {
-    return is(.@"struct")(T) and @typeInfo(T).@"struct".is_tuple;
 }
 
 test {
