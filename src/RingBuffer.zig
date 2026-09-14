@@ -4,11 +4,16 @@ const extras = @import("./lib.zig");
 
 pub fn RingBuffer(comptime T: type, comptime capacity: usize) type {
     return struct {
-        items: [capacity]T = undefined,
-        len: usize = 0,
+        items: [capacity]T,
+        len: usize,
         comptime capacity: usize = capacity,
 
         const Self = @This();
+
+        pub const empty: Self = .{
+            .items = undefined,
+            .len = 0,
+        };
 
         pub fn append(self: *Self, new_item: T) void {
             if (self.len == self.capacity) {
@@ -17,6 +22,14 @@ pub fn RingBuffer(comptime T: type, comptime capacity: usize) type {
             }
             self.items[self.len] = new_item;
             self.len += 1;
+        }
+
+        pub fn slice(self: *Self) []T {
+            return self.items[0..self.len];
+        }
+
+        pub fn rest(self: *Self) []T {
+            return self.items[self.len..];
         }
     };
 }
