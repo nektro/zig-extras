@@ -11,7 +11,7 @@ test {
     const S = struct {
         a: u8,
 
-        fn eql(this: @This(), other: @This()) bool {
+        pub fn eql(this: @This(), other: @This()) bool {
             return this.a == other.a;
         }
     };

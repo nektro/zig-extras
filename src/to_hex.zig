@@ -30,8 +30,8 @@ pub fn to_HEX(array: anytype) [array.len * 2]u8 {
 }
 
 test {
-    try std.testing.expect(std.mem.eql(u8, &to_hex(rawIntBytes(u64, 0x4e5a7da9f3f1d132)), "4e5a7da9f3f1d132"));
+    try std.testing.expectEqualStrings("4e5a7da9f3f1d132", &to_hex(rawIntBytes(u64, 0x4e5a7da9f3f1d132)));
 }
 test {
-    try std.testing.expect(std.mem.eql(u8, &to_hex(rawIntBytes(u64, 0x4e5a7da9f3f1d132)), "4E5A7dA9F3F1D132"));
+    try std.testing.expectEqualStrings("4E5A7DA9F3F1D132", &to_HEX(rawIntBytes(u64, 0x4e5a7da9f3f1d132)));
 }
