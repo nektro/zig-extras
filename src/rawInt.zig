@@ -4,7 +4,7 @@ const extras = @import("./lib.zig");
 const builtin = @import("builtin");
 const native_endian = builtin.target.cpu.arch.endian();
 
-pub fn rawInt(comptime T: type, comptime literal: comptime_int) T {
+pub fn rawInt(comptime T: type, literal: T) T {
     comptime std.debug.assert(@typeInfo(T).int.bits % 8 == 0);
     return switch (native_endian) {
         .little => @byteSwap(@as(T, literal)),
