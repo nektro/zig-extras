@@ -74,6 +74,7 @@ pub const StructOfArrays = @import("./StructOfArrays.zig").StructOfArrays;
 pub const StaticMultiList = @import("./StaticMultiList.zig").StaticMultiList;
 pub const join = @import("./join.zig").join;
 pub const omit = @import("./omit.zig").omit;
+pub const Omit = @import("./omit.zig").Omit;
 pub const swapMany = @import("./swapMany.zig").swapMany;
 pub const swapManyLR = @import("./swapMany.zig").swapManyLR;
 pub const ManyArrayList = @import("./ManyArrayList.zig").ManyArrayList;
