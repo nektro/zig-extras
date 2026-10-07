@@ -30,5 +30,6 @@ pub fn Omit(T: type, field_name: []const u8) type {
         };
         i += 1;
     }
+    if (i == fields_original.len) @compileError("struct type " ++ @typeName(T) ++ " does not have a field named \"" ++ field_name ++ "\"");
     return @Struct(.auto, null, &names, &types, &attrs);
 }
