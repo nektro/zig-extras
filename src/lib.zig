@@ -93,6 +93,7 @@ pub const indexOfAggregate = @import("./indexOfAggregate.zig").indexOfAggregate;
 pub const isTuple = @import("./isTuple.zig").isTuple;
 pub const omitSlice = @import("./omitSlice.zig").omitSlice;
 pub const OmitSlice = @import("./omitSlice.zig").OmitSlice;
+pub const maxLen = @import("./maxLen.zig").maxLen;
 
 test {
     _ = @import("reduceNumber.zig");
@@ -173,4 +174,5 @@ test {
     _ = @import("indexOfAggregate.zig");
     _ = @import("isTuple.zig");
     _ = @import("omitSlice.zig");
+    _ = @import("maxLen.zig");
 }
