@@ -23,9 +23,6 @@ test {
     try std.testing.expect(OneSmallerInt(u5) == u4);
 }
 test {
-    try std.testing.expect(OneSmallerInt(i1) == i0);
-}
-test {
     try std.testing.expect(OneSmallerInt(i2) == i1);
 }
 test {

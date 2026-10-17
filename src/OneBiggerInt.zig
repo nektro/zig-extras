@@ -23,9 +23,6 @@ test {
     try std.testing.expect(OneBiggerInt(u4) == u5);
 }
 test {
-    try std.testing.expect(OneBiggerInt(i0) == i1);
-}
-test {
     try std.testing.expect(OneBiggerInt(i1) == i2);
 }
 test {

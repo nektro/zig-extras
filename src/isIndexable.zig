@@ -22,9 +22,9 @@ fn is(comptime id: std.builtin.TypeId) fn (type) bool {
 }
 
 test {
-    const array = [_]u8{0} ** 10;
+    const array: [10]u8 = @splat(0);
     const slice = @as([]const u8, &array);
-    const vector: @Vector(2, u32) = [_]u32{0} ** 2;
+    const vector: @Vector(2, u32) = @splat(0);
     const tuple = .{ 1, 2, 3 };
 
     try std.testing.expect(isIndexable(@TypeOf(array)));

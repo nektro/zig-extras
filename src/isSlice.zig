@@ -19,7 +19,7 @@ fn is(comptime id: std.builtin.TypeId) fn (type) bool {
 }
 
 test {
-    const array = [_]u8{0} ** 10;
+    const array: [10]u8 = @splat(0);
     var runtime_zero: usize = 0;
     _ = &runtime_zero;
     try std.testing.expect(isSlice(@TypeOf(array[runtime_zero..])));
