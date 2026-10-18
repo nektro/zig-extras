@@ -5,31 +5,27 @@ const extras = @import("./lib.zig");
 pub fn omit(value: anytype, comptime field_name: []const u8) Omit(@TypeOf(value), field_name) {
     const T = @TypeOf(value);
     var result: Omit(T, field_name) = undefined;
-    inline for (comptime std.meta.fields(T)) |f| {
-        if (comptime std.mem.eql(u8, f.name, field_name)) continue;
-        @field(result, f.name) = @field(value, f.name);
+    inline for (comptime std.meta.fieldNames(T)) |f| {
+        if (comptime std.mem.eql(u8, f, field_name)) continue;
+        @field(result, f) = @field(value, f);
     }
     return result;
 }
 
 pub fn Omit(T: type, field_name: []const u8) type {
-    const fields_original = std.meta.fields(T);
-    const len = fields_original.len - 1;
+    const info = @typeInfo(T).@"struct";
+    const len = info.field_names.len - 1;
     var names: [len][]const u8 = undefined;
     var types: [len]type = undefined;
-    var attrs: [len]std.builtin.Type.StructField.Attributes = undefined;
+    var attrs: [len]std.builtin.Type.Struct.FieldAttributes = undefined;
     var i: usize = 0;
-    for (fields_original) |f| {
-        if (std.mem.eql(u8, f.name, field_name)) continue;
-        names[i] = f.name;
-        types[i] = f.type;
-        attrs[i] = .{
-            .@"comptime" = f.is_comptime,
-            .@"align" = f.alignment,
-            .default_value_ptr = f.default_value_ptr,
-        };
+    for (info.field_names, info.field_types, info.field_attrs) |f, t, a| {
+        if (std.mem.eql(u8, f, field_name)) continue;
+        names[i] = f;
+        types[i] = t;
+        attrs[i] = a;
         i += 1;
     }
-    if (i == fields_original.len) @compileError("struct type " ++ @typeName(T) ++ " does not have a field named \"" ++ field_name ++ "\"");
+    if (i == info.field_names.len) @compileError("struct type " ++ @typeName(T) ++ " does not have a field named \"" ++ field_name ++ "\"");
     return @Struct(.auto, null, &names, &types, &attrs);
 }

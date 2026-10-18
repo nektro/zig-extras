@@ -5,8 +5,8 @@ pub fn omitSlice(allocator: std.mem.Allocator, T: type, slice: []const T, compti
     const E = OmitSlice(T, field_names);
     const result = try allocator.alloc(E, slice.len);
     for (slice, result) |v, *w| {
-        inline for (@typeInfo(E).@"struct".fields) |f| {
-            @field(w, f.name) = @field(v, f.name);
+        inline for (@typeInfo(E).@"struct".field_names) |f| {
+            @field(w, f) = @field(v, f);
         }
     }
     return result;
