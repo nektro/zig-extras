@@ -19,9 +19,9 @@ pub fn StaticMultiList(T: type) type {
                     }
                 }
                 var result: @This() = undefined;
-                for (std.meta.fields(T)) |field| {
-                    const constant = @field(temp, field.name)[0..data.len].*;
-                    @field(result.items, field.name) = &constant;
+                for (std.meta.fieldNames(T)) |field| {
+                    const constant = @field(temp, field)[0..data.len].*;
+                    @field(result.items, field) = &constant;
                 }
                 break :blk result;
             };

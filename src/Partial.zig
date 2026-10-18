@@ -6,14 +6,14 @@ const expectSimilarType = extras.expectSimilarType;
 /// Creates a new version of struct T where all fields are optional.
 /// Name inspried by https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype.
 pub fn Partial(comptime T: type) type {
-    const fields = std.meta.fields(T);
-    var names: [fields.len][]const u8 = undefined;
-    var types: [fields.len]type = undefined;
-    var attrs: [fields.len]std.builtin.Type.StructField.Attributes = undefined;
-    for (fields, 0..) |item, i| {
-        names[i] = item.name;
-        types[i] = ?item.type;
-        attrs[i] = .{ .default_value_ptr = &@as(?item.type, null) };
+    const info = @typeInfo(T).@"struct";
+    var names: [info.field_names.len][]const u8 = undefined;
+    var types: [info.field_types.len]type = undefined;
+    var attrs: [info.field_attrs.len]std.builtin.Type.Struct.FieldAttributes = undefined;
+    for (info.field_names, info.field_types, 0..) |name, ty, i| {
+        names[i] = name;
+        types[i] = ?ty;
+        attrs[i] = .{ .default_value_ptr = &@as(?ty, null) };
     }
     return @Struct(.auto, null, &names, &types, &attrs);
 }

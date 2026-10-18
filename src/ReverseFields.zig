@@ -5,12 +5,12 @@ const expectSimilarType = extras.expectSimilarType;
 
 pub fn ReverseFields(comptime T: type) type {
     const info = @typeInfo(T).@"struct";
-    const len = info.fields.len;
+    const len = info.field_names.len;
     var names: [len][]const u8 = undefined;
     var types: [len]type = undefined;
     for (0..len) |i| {
-        names[i] = info.fields[len - 1 - i].name;
-        types[i] = info.fields[len - 1 - i].type;
+        names[i] = info.field_names[len - 1 - i];
+        types[i] = info.field_types[len - 1 - i];
     }
     return @Struct(info.layout, null, &names, &types, &@splat(.{}));
 }

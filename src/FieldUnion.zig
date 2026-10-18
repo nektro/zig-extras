@@ -4,15 +4,14 @@ const extras = @import("./lib.zig");
 const expectSimilarType = extras.expectSimilarType;
 
 pub fn FieldUnion(comptime T: type) type {
-    const fields = std.meta.fields(T);
-    var names: [fields.len][]const u8 = undefined;
-    var types: [fields.len]type = undefined;
-    var attrs: [fields.len]std.builtin.Type.UnionField.Attributes = undefined;
-
-    inline for (fields, 0..) |field, i| {
-        names[i] = field.name;
-        types[i] = field.type;
-        attrs[i] = .{ .@"align" = field.alignment };
+    const info = @typeInfo(T).@"struct";
+    var names: [info.field_names.len][]const u8 = undefined;
+    var types: [info.field_types.len]type = undefined;
+    var attrs: [info.field_attrs.len]std.builtin.Type.Union.FieldAttributes = undefined;
+    inline for (info.field_names, info.field_types, info.field_attrs, 0..) |field, ty, attr, i| {
+        names[i] = field;
+        types[i] = ty;
+        attrs[i] = .{ .@"align" = attr.@"align" };
     }
     return @Union(.auto, std.meta.FieldEnum(T), &names, &types, &attrs);
 }

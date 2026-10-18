@@ -3,7 +3,7 @@ const string = []const u8;
 const extras = @import("./lib.zig");
 
 pub fn asciiUpper(alloc: std.mem.Allocator, input: string) ![:0]u8 {
-    var buf = try alloc.dupeZ(u8, input);
+    var buf = try alloc.dupeSentinel(u8, input, 0);
     for (0..buf.len) |i| {
         buf[i] = std.ascii.toUpper(buf[i]);
     }

@@ -15,11 +15,11 @@ pub fn expectSimilarType(comptime A: type, comptime B: type) !void {
         try std.testing.expect(info_a_s.is_tuple == info_b_s.is_tuple);
         try std.testing.expect(info_a_s.backing_integer == info_b_s.backing_integer);
 
-        inline for (info_a_s.fields, info_b_s.fields) |fa, fb| {
-            try std.testing.expect(std.mem.eql(u8, fa.name, fb.name));
-            try expectSimilarType(fa.type, fb.type);
-            try std.testing.expect(fa.alignment == fb.alignment);
-            try std.testing.expect(fa.is_comptime == fb.is_comptime);
+        inline for (info_a_s.field_names, info_a_s.field_types, info_a_s.field_attrs, info_b_s.field_names, info_b_s.field_types, info_b_s.field_attrs) |fa, fat, faa, fb, fbt, fba| {
+            try std.testing.expectEqualStrings(fa, fb);
+            try expectSimilarType(fat, fbt);
+            try std.testing.expectEqual(faa.@"comptime", fba.@"comptime");
+            try std.testing.expectEqual(faa.@"align", fba.@"align");
         }
 
         return;
@@ -31,10 +31,10 @@ pub fn expectSimilarType(comptime A: type, comptime B: type) !void {
         try std.testing.expect(info_a_u.layout == info_b_u.layout);
         try expectSimilarType(info_a_u.tag_type.?, info_b_u.tag_type.?);
 
-        inline for (info_a_u.fields, info_b_u.fields) |fa, fb| {
-            try std.testing.expect(std.mem.eql(u8, fa.name, fb.name));
-            try expectSimilarType(fa.type, fb.type);
-            try std.testing.expect(fa.alignment == fb.alignment);
+        inline for (info_a_u.field_names, info_a_u.field_types, info_a_u.field_attrs, info_b_u.field_names, info_b_u.field_types, info_b_u.field_attrs) |fa, fat, faa, fb, fbt, fba| {
+            try std.testing.expectEqualStrings(fa, fb);
+            try expectSimilarType(fat, fbt);
+            try std.testing.expectEqual(faa.@"align", fba.@"align");
         }
 
         return;
@@ -44,11 +44,11 @@ pub fn expectSimilarType(comptime A: type, comptime B: type) !void {
         const info_b_e = info_b.@"enum";
 
         try std.testing.expect(info_a_e.tag_type == info_b_e.tag_type);
-        try std.testing.expect(info_a_e.is_exhaustive == info_b_e.is_exhaustive);
+        try std.testing.expect(info_a_e.mode == info_b_e.mode);
 
-        inline for (info_a_e.fields, info_b_e.fields) |fa, fb| {
-            try std.testing.expect(std.mem.eql(u8, fa.name, fb.name));
-            try std.testing.expect(fa.value == fb.value);
+        inline for (info_a_e.field_names, info_a_e.field_values, info_b_e.field_names, info_b_e.field_values) |fa, fav, fb, fbv| {
+            try std.testing.expectEqualStrings(fa, fb);
+            try std.testing.expect(fav == fbv);
         }
 
         return;
