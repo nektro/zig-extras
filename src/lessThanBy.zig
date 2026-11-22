@@ -5,7 +5,17 @@ const extras = @import("./lib.zig");
 pub fn lessThanBy(comptime T: type, comptime field: std.meta.FieldEnum(T)) fn (void, T, T) bool {
     const S = struct {
         pub fn lessThan(_: void, lhs: T, rhs: T) bool {
-            return @field(lhs, @tagName(field)) < @field(rhs, @tagName(field));
+            const F = @FieldType(T, @tagName(field));
+            const l: F = @field(lhs, @tagName(field));
+            const r: F = @field(rhs, @tagName(field));
+            if (@typeInfo(F) == .optional) {
+                if (l == null and r == null) return false;
+                if (l == null and r != null) return true;
+                if (l != null and r == null) return false;
+                if (l != null and r != null) return l.? < r.?;
+                unreachable;
+            }
+            return l < r;
         }
     };
     return S.lessThan;
